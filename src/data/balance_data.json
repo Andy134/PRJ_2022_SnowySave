@@ -1,0 +1,10 @@
+{
+    "amount": 32000,
+    "months": [
+        {
+            "code": 2022012,
+            "balance": 30000,
+            "change": null
+        }
+    ]
+}

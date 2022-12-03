@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.App {
+}
+
+#error-page {
+  padding: 24px;
+}
+
+.title, .description {
+  line-height: 1.5em;
+  height: 3em;
+  overflow: hidden;  
+  /* white-space: nowrap; */
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.description {
+  color: rgb(85, 85, 85);
+}
+
+.amount {
+  font-weight: 500;
+  color: rgb(0, 0, 0);
+}
+
+.income .subPack {
+  cursor: pointer;
+  border: 1px dashed transparent;
+  border-radius: 10%;
+}
+
+.income .subPack.addItem img{
+  opacity: 0.25;
+}
+
+.income .subPack:hover {
+  border: 1px dashed gray;
+}
+
+.income .subPack:active, .income .subPack.selected {
+  border: 1px solid gray;
+}
+
+.income .subPack img {
+  max-width: 100px;
+}
+
+

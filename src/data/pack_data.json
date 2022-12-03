@@ -1,0 +1,18 @@
+{
+    "sublist":
+    [
+        {
+            "id": 0,
+            "packId": 0,
+            "title": "Food",
+            "img": "food.png",
+            "amount": 3000
+        },
+        {
+            "id": 1,
+            "packId": 0,
+            "title": "Clothing",
+            "img": "laundry.png",
+            "amount": 23000
+        }
+}
