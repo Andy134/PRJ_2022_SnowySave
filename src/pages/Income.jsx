@@ -1,12 +1,10 @@
-import moment from "moment/moment";
-import { useContext } from "react";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { storeData } from "../data/storeData";
 import { packService } from "../service/pack.service";
 import { util } from "../utility";
 import { AppContext } from "./Root";
-import { storeData } from "../data/storeData";
 
 const initIncomeForm = {
     "src": "",
@@ -139,9 +137,9 @@ export default function Income() {
                         <hr/>
                         {history?.slice(0,5).map((item, idx)=>{
                             return <div key={idx} >
-                                <div className={`history-item py-2 d-flex align-items-${item.type == "I" ? 'end' : 'start'} flex-column`} with={'100%'}>
+                                <div className={`history-item py-2 d-flex align-items-${item.type === "I" ? 'end' : 'start'} flex-column`} with={'100%'}>
                                     <span>
-                                        {item.type == "I" ?
+                                        {item.type === "I" ?
                                             <strong className="text-success">+ {util.getLocalCurrency(+item.amount)}</strong> 
                                             :
                                             <strong className="text-danger">- {util.getLocalCurrency(+item.amount)}</strong> 

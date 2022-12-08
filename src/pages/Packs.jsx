@@ -1,13 +1,11 @@
 import { useContext } from "react";
-import { useEffect, useState } from "react";
 
 import Pack from "../components/Pack";
-import { storeData } from "../data/storeData";
 import { AppContext } from "./Root";
 
 export default function Packs() {
     
-    const {balance, setBalance} = useContext(AppContext);
+    const {balance, null} = useContext(AppContext);
 
     // useEffect(()=>{
     //     let balanceTotal = balance.amount;
