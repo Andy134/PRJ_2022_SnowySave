@@ -39,26 +39,39 @@ code {
   color: rgb(0, 0, 0);
 }
 
-.income .subPack {
+.outcome .subPack {
   cursor: pointer;
   border: 1px dashed transparent;
   border-radius: 10%;
 }
 
-.income .subPack.addItem img{
+.outcome .subPack.addItem img{
   opacity: 0.25;
 }
 
-.income .subPack:hover {
+.outcome .subPack:hover {
   border: 1px dashed gray;
 }
 
-.income .subPack:active, .income .subPack.selected {
+.outcome .subPack:active, .outcome .subPack.selected {
   border: 1px solid gray;
 }
 
-.income .subPack img {
+.outcome .subPack img {
   max-width: 100px;
 }
 
+.link {
+  text-decoration: none;
+}
 
+.history-item {
+  width: 100%;
+}
+
+.history-item span{
+  white-space: nowrap;
+  width: 70%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

@@ -1,7 +1,6 @@
-import { useNavigate , useRouteError } from "react-router-dom";
+import { Link, useRouteError } from "react-router-dom";
 
 export default function ErrorPage() {
-  const navigate = useNavigate();
   const error = useRouteError();
   console.error(error);
 
@@ -12,7 +11,7 @@ export default function ErrorPage() {
       <p>
         <i>{error.statusText || error.message}</i>
       </p>
-      <a href="/" to="/"onClick={()=> navigate("/")}>Go back</a>
+      <Link to="/">Go back</Link>
     </div>
   );
 }

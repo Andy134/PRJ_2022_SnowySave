@@ -1,11 +1,10 @@
 import { useMemo } from 'react';
+import { util } from '../utility';
 
 export default function Pack({item}) {
     var amount = useMemo(()=>{
-        const balance = item.balance ? item.balance : 0
-        return (balance)
-            .toLocaleString('it-IT', {style : 'currency', currency : 'VND'});
-    },[item.balance])
+        return util.getLocalCurrency(item.value);
+    },[item.value])
 
     return <>
         <div className="card">

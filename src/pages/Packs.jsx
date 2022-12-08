@@ -1,15 +1,13 @@
+import { useContext } from "react";
 import { useEffect, useState } from "react";
 
 import Pack from "../components/Pack";
 import { storeData } from "../data/storeData";
+import { AppContext } from "./Root";
 
 export default function Packs() {
     
-    const [packLst, setPackLst] = useState([])
-
-    useEffect(()=>{
-        setPackLst(storeData);
-    },[])
+    const {balance, setBalance} = useContext(AppContext);
 
     // useEffect(()=>{
     //     let balanceTotal = balance.amount;
@@ -32,9 +30,9 @@ export default function Packs() {
     // }
 
     return <>
-        <div className="container">
-            <div className="row mt-2 justify-content-center align-items-center g-4">
-                {packLst && packLst?.map((item, idx)=>{
+        <div className="packs">
+            <div className="row g-4">
+                {balance && balance.packs?.map((item, idx)=>{
                     return <div key={idx} className="col-sm-12 col-md-6 col-lg-4">
                             <Pack item={item}/>
                             </div>
