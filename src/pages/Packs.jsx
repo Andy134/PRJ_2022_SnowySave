@@ -5,7 +5,7 @@ import { AppContext } from "./Root";
 
 export default function Packs() {
     
-    const {balance, null} = useContext(AppContext);
+    const {balance} = useContext(AppContext);
 
     // useEffect(()=>{
     //     let balanceTotal = balance.amount;
