@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Container, Form, Modal } from "react-bootstrap";
 import { storeData } from "../data/storeData";
 import { packService } from "../service/pack.service";
 
@@ -127,34 +127,35 @@ export default function OutCome() {
             <Modal.Title>Thêm khoản chi</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-
-                <Form id="newsubform" onSubmit={handleSaveSubForm}>
-                    <Form.Group className="mb-3" controlId="formTitle">
-                        <Form.Label>Title</Form.Label>
-                        <Form.Control type="text" 
-                            name="title"
-                            value={newsubform.title}
-                            onChange={handleChangeSubForm} 
-                        />
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formImage" 
-                            
-                    >
-                        <Form.Label>Image</Form.Label>
-                        <div className="d-flex gap-2">
-                            <Form.Control name="img" type="text" 
-                                value={newsubform.img}
+                <Container>
+                    <Form id="newsubform" onSubmit={handleSaveSubForm}>
+                        <Form.Group className="mb-3" controlId="formTitle">
+                            <Form.Label>Title</Form.Label>
+                            <Form.Control type="text" 
+                                name="title"
+                                value={newsubform.title}
+                                onChange={handleChangeSubForm} 
+                            />
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formImage" 
+                                
+                        >
+                            <Form.Label>Image</Form.Label>
+                            <div className="d-flex gap-2">
+                                <Form.Control name="img" type="text" 
+                                    value={newsubform.img}
+                                    onChange={handleChangeSubForm} />
+                                <button type="button" className="btn btn-light">...</button>
+                            </div>
+                        </Form.Group>
+                        <Form.Group className="mb-3" controlId="formAmount">
+                            <Form.Label>Amount</Form.Label>
+                            <Form.Control name="amount" type="number"  
+                                value={newsubform.amount}
                                 onChange={handleChangeSubForm} />
-                            <button type="button" className="btn btn-light">...</button>
-                        </div>
-                    </Form.Group>
-                    <Form.Group className="mb-3" controlId="formAmount">
-                        <Form.Label>Amount</Form.Label>
-                        <Form.Control name="amount" type="number"  
-                            value={newsubform.amount}
-                            onChange={handleChangeSubForm} />
-                    </Form.Group>
-                </Form>
+                        </Form.Group>
+                    </Form>
+                </Container>
             </Modal.Body>
             <Modal.Footer>
                 <Button variant="light" onClick={handleCloseModal}>

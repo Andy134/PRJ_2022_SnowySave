@@ -30,6 +30,12 @@ code {
   -webkit-box-orient: vertical;
 }
 
+.title.singleline {
+  line-height: 1.5em;
+  height: 1.5em;
+  -webkit-line-clamp: 1;
+}
+
 .description {
   color: rgb(85, 85, 85);
 }

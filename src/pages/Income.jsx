@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
-import { Button, Form } from "react-bootstrap";
+import { Button, Container, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import Pack from "../components/Pack";
 import { storeData } from "../data/storeData";
 import { packService } from "../service/pack.service";
 import { util } from "../utility";
@@ -18,6 +19,7 @@ export default function Income() {
     const [incomeForm, setIncomeForm] = useState(initIncomeForm)
     const [history, setHistory] = useState([])
     const [packLst, setPackLst] = useState()
+    const [openModal, setOpenModal] = useState(false)
     
     const {balance, setBalance} = useContext(AppContext); 
 
@@ -26,7 +28,13 @@ export default function Income() {
         setHistory(packService.fetchHistory())
     },[])
 
-    function handleDistribution() {
+    function handleReset(){
+        if(incomeForm !== initIncomeForm){
+            setIncomeForm(initIncomeForm)
+        }
+    }
+
+    function handleAutoDistribution() {
         // Balance
         let total = balance?.total || 0
         if(incomeForm.amount <= 0) {
@@ -56,15 +64,39 @@ export default function Income() {
         setIncomeForm(initIncomeForm)
     }
 
+    function handleDistribution() {
+        let tempTotal = 0
+        packLst.forEach((item) => {
+            tempTotal = tempTotal + +(item.amount || 0)
+        })
+        if(tempTotal > incomeForm.amount){
+            alert("Phân bổ nhiều hơn số tiền nhập vào: " + util.getLocalCurrency(tempTotal - incomeForm.amount))
+        }
+    }
+
     function handleChange(e){
         const name = e.target.name;
         const value = e.target.value;
         setIncomeForm({...incomeForm, [name]: value})
     }
 
+    function handleModal(){
+        // Balance
+        if(incomeForm.amount <= 0) {
+            alert("Số tiền phải lớn hơn 0");
+            return;
+        }
+        setOpenModal(!openModal)
+    }
+
+    function changeFormAmount(value){
+        setIncomeForm({...incomeForm, amount: value})
+    }
+
     return <>
         {/* Income */}
         <div className="income row">
+
             <div className="col-12">
                 <div className="card text-start">
                     <div className="card-header">
@@ -76,8 +108,7 @@ export default function Income() {
                                 col-lg-6 offset-lg-3
                                 col-md-8 offset-md-2
                                 col-sm-10 offset-sm-1" 
-                                id="newIncomeForm" 
-                                onSubmit={handleDistribution}>
+                                id="newIncomeForm">
                                 
                                 <Form.Group className="mb-3" controlId="formAmount">
                                     <Form.Label>Số tiền</Form.Label>
@@ -98,24 +129,42 @@ export default function Income() {
                         </div>
                     </div>
                     <div className="card-footer d-flex justify-content-center gap-2">
-                        <Button variant="light" type="reset" form="newIncomeForm">
+                        <Button variant="light" type="reset" form="newIncomeForm" onClick={handleReset}>
                             Xóa
                         </Button>
-                        <Button variant="dark" type="button" onClick={handleDistribution}>
+                        <Button variant="warning" type="button" onClick={handleModal}>
+                            Phân bổ
+                        </Button>
+                        <Button variant="dark" type="button" onClick={handleAutoDistribution}>
                             Phân bổ tự động
                         </Button>
                     </div>
                 </div>
             </div>
-            <div className="col-md-6 col-sm-12 p-md-3 pt-sm-3">Danh sách quỹ
-                <div>
 
-                    {balance?.packs?.map((item)=>{return <p key={item.id}>{JSON.stringify(item)}</p>})}
-
+            <div className="col-md-6 col-sm-12 p-md-3 pt-sm-3">
+                <div className="packs card">
+                    <div className="card-body">
+                        <h5 className="card-title">Danh sách quỹ</h5>
+                        <hr/>
+                        {/* {balance?.packs?.map((item)=>{return <p key={item.id}>{JSON.stringify(item)}</p>})} */}
+                        {/* <div className="row g-4">
+                            {balance && balance.packs?.map((item, idx)=>{
+                                return <div key={idx} className="col-sm-12 col-md-6 col-lg-4">
+                                        <Pack item={item}/>
+                                        </div>
+                            })}
+                        </div> */}
+                        <div className="d-flex flex-column">
+                            {balance?.packs?.map((item)=>{
+                                return <Pack key={item.id} tyle={"list"} item={item}/>
+                            })}
+                        </div>
+                    </div>
                 </div>
             </div>
+
             <div className="col-md-6 col-sm-12 p-md-3 pt-sm-3">
-                
                 <div className="balance card">
                     <div className="card-body">
                         <h5 className="card-title">Thông tin số dư</h5>
@@ -158,6 +207,90 @@ export default function Income() {
             </div>
 
         </div>
+
+        {/* Modal Add new sub */}
+        <Modal show={openModal} onHide={handleModal}>
+            <Modal.Header closeButton>
+            <Modal.Title>Phân bổ </Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+                <Container>
+                    <DistributionManual param={{ 
+                        amount : incomeForm.amount, 
+                        changeFormAmount,
+                        packLst, 
+                        setPackLst    
+                    }}/>
+                </Container>
+            </Modal.Body>
+            <Modal.Footer>
+                <Button variant="light" onClick={handleModal}>
+                    Close
+                </Button>
+                <Button variant="dark" type="button" onClick={handleDistribution}>
+                    Save
+                </Button>
+            </Modal.Footer>
+        </Modal>
+    </>
+}
+
+function DistributionManual({param}){
+
+    const [amount, setAmount] = useState(param.amount)
+    const {balance} = useContext(AppContext)
+
+    useEffect(()=>{
+        return ()=>{
+            param.setPackLst(storeData)
+            param.changeFormAmount(amount)
+        }
+    }, [])
+
+    function handleChangeAmount(e) {
+        setAmount(+e.target.value)
+    }
+
+    function handleInput(e) {
+        let id = +e.target.name.replace('input-','')
+        let value = +e.target.value
+        let pack = param.packLst.find((item)=>item.id === id)
+        pack.amount = value
+        param.setPackLst([...param.packLst])
+    }
+
+    return <>
+        <Form id="distributionForm">
+            <Form.Group className="mb-3" controlId="formTitle">
+                <Form.Label>Số dư: </Form.Label>&nbsp;
+                <strong>{util.getLocalCurrency(balance.total)}</strong>
+            </Form.Group>
+            
+            <Form.Group className="mb-3" controlId="amount">
+                <Form.Label>Nạp tiền</Form.Label>
+                <Form.Control type="number" 
+                    name="amount"
+                    value={amount}
+                    onChange={handleChangeAmount} 
+                />
+            </Form.Group>
+
+            <Form.Group className="mb-3" controlId="amount">
+                {balance?.packs?.map((item, idx)=>{
+                    return <div className="row" key={idx}>
+                        <div className="col-sm-12 col-md-8">
+                            <Pack key={idx} item={item} tyle={"list"}/>
+                        </div>
+                        <div className="col-sm-12 col-md-4 d-flex align-items-center">
+                            <input type="number" name={`input-${item.id}`}
+                                className="form-control"
+                                onChange={handleInput}
+                            />
+                        </div>
+                    </div>
+                })}
+            </Form.Group>
+        </Form>
     </>
 }
 
