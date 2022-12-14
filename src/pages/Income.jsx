@@ -37,6 +37,8 @@ export default function Income() {
     function handleAutoDistribution() {
         // Balance
         let total = balance?.total || 0
+        let undefined = balance?.undefined || 0
+
         if(incomeForm.amount <= 0) {
             alert("Số tiền phải lớn hơn 0");
             return;
@@ -45,17 +47,15 @@ export default function Income() {
         total = total + +incomeForm.amount
 
         let packs = balance?.packs || storeData;
-        if(packLst){
-            packs = packs.map(item => {
-                const percent = +item.percent
-                let value =  (percent * incomeForm.amount) / 100
-                item.value = (item.value || 0) + value
-                return item
-            })
-        }
+        packs = packs.map(item => {
+            const percent = +item.percent
+            let value =  (percent * incomeForm.amount) / 100
+            item.value = (item.value || 0) + value
+            return item
+        })
 
-        setBalance({...balance, total, packs})
-        packService.autoDistribution(total, packs)
+        setBalance({...balance, total})
+        packService.autoDistribution(total, packs, undefined)
         // History
         history.unshift(incomeForm)
         packService.updateHistory(incomeForm)
@@ -66,12 +66,41 @@ export default function Income() {
 
     function handleDistribution() {
         let tempTotal = 0
+        let total = balance?.total
+        let undefined = balance?.undefined
         packLst.forEach((item) => {
             tempTotal = tempTotal + +(item.amount || 0)
         })
         if(tempTotal > incomeForm.amount){
             alert("Phân bổ nhiều hơn số tiền nhập vào: " + util.getLocalCurrency(tempTotal - incomeForm.amount))
         }
+        else{
+
+            // Balance
+            if(tempTotal < incomeForm.amount){
+                undefined = undefined + (incomeForm.amount - tempTotal)
+            }
+            total = total + tempTotal
+
+            let packs = balance?.packs || storeData;
+            packs.forEach(element => {
+                let id = element.id
+                const currPack = packLst.find((item)=> +item.id === +id)
+                const amount = currPack?.amount || 0
+                element.value = element.value + +amount
+            });
+
+            setBalance({...balance, total, packs, undefined})
+            packService.autoDistribution(total, packs, undefined)
+
+             // History
+            history.unshift(incomeForm)
+            packService.updateHistory(incomeForm)
+            setHistory([...history])
+            setOpenModal(false)
+            setIncomeForm({...initIncomeForm})
+        }
+        
     }
 
     function handleChange(e){
@@ -82,10 +111,10 @@ export default function Income() {
 
     function handleModal(){
         // Balance
-        if(incomeForm.amount <= 0) {
-            alert("Số tiền phải lớn hơn 0");
-            return;
-        }
+        // if(incomeForm.amount <= 0) {
+        //     alert("Số tiền phải lớn hơn 0");
+        //     return;
+        // }
         setOpenModal(!openModal)
     }
 
@@ -193,7 +222,7 @@ export default function Income() {
                                             :
                                             <strong className="text-danger">- {util.getLocalCurrency(+item.amount)}</strong> 
                                         }
-                                        &nbsp;-&nbsp;{item.src}</span>
+                                        {item.src && ` - ${item.src}`}</span>
                                     {/* <p className="text-muted">{moment(item.date).format('DD/MM/YYYY')}</p> */}
                                 </div>
                             </div>
@@ -242,7 +271,11 @@ function DistributionManual({param}){
 
     useEffect(()=>{
         return ()=>{
-            param.setPackLst(storeData)
+            let initStore = param.packLst.map((item)=>{
+                item.amount = 0
+                return item
+            })
+            param.setPackLst([...initStore])
             param.changeFormAmount(amount)
         }
     }, [])

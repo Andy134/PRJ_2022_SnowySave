@@ -18,9 +18,9 @@ function currentBalance() {
     return balance || null
 }
 
-function autoDistribution(total, packs) {
+function autoDistribution(total, packs, undefined) {
     var balance = JSON.parse(localStorage.getItem(BALANCE)) || {total: 0};
-    balance = {...balance, total, packs};
+    balance = {...balance, total, packs, undefined};
     localStorage.setItem(BALANCE, JSON.stringify(balance));
 }
 
