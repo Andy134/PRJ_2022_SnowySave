@@ -37,7 +37,7 @@ export default function Income() {
     function handleAutoDistribution() {
         // Balance
         let total = balance?.total || 0
-        let undefined = balance?.undefined || 0
+        let undef = balance?.undefined || 0
 
         if(incomeForm.amount <= 0) {
             alert("Số tiền phải lớn hơn 0");
@@ -54,8 +54,8 @@ export default function Income() {
             return item
         })
 
-        setBalance({...balance, total})
-        packService.autoDistribution(total, packs, undefined)
+        setBalance({...balance, total, packs})
+        packService.autoDistribution(total, packs, undef)
         // History
         history.unshift(incomeForm)
         packService.updateHistory(incomeForm)
@@ -66,8 +66,8 @@ export default function Income() {
 
     function handleDistribution() {
         let tempTotal = 0
-        let total = balance?.total
-        let undefined = balance?.undefined
+        let total = balance?.total  || 0
+        let undef = balance?.undefined || 0
         packLst.forEach((item) => {
             tempTotal = tempTotal + +(item.amount || 0)
         })
@@ -75,10 +75,9 @@ export default function Income() {
             alert("Phân bổ nhiều hơn số tiền nhập vào: " + util.getLocalCurrency(tempTotal - incomeForm.amount))
         }
         else{
-
             // Balance
             if(tempTotal < incomeForm.amount){
-                undefined = undefined + (incomeForm.amount - tempTotal)
+                undef = undef + (incomeForm.amount - tempTotal)
             }
             total = total + tempTotal
 
@@ -91,14 +90,14 @@ export default function Income() {
             });
 
             setBalance({...balance, total, packs, undefined})
-            packService.autoDistribution(total, packs, undefined)
+            packService.autoDistribution(total, packs, undef)
 
              // History
             history.unshift(incomeForm)
             packService.updateHistory(incomeForm)
             setHistory([...history])
             setOpenModal(false)
-            setIncomeForm({...initIncomeForm})
+            setIncomeForm(initIncomeForm)
         }
         
     }
@@ -125,8 +124,8 @@ export default function Income() {
     return <>
         {/* Income */}
         <div className="income row">
-
-            <div className="col-12">
+            <div className="col-md-0 col-lg-2"></div>
+            <div className="col-md-12 col-lg-8">
                 <div className="card text-start">
                     <div className="card-header">
                         <h5 className="card-title">Nạp tiền</h5>
@@ -199,17 +198,25 @@ export default function Income() {
                         <h5 className="card-title">Thông tin số dư</h5>
                         <hr/>
                         <div className="d-flex justify-content-center align-items-center gap-3">
-                            <h3 className="card-text d-flex justify-content-center">
+                            <h4 className="card-text d-flex justify-content-center">
                                 {util.getLocalCurrency(balance?.total)}
-                            </h3>
-                            -
-                            <h5 className="card-text d-flex justify-content-center text-muted">
-                                {util.getLocalCurrency(balance?.undefined)}
-                            </h5>
+                            </h4>
                         </div>
                     </div>
                 </div>
-                <div className="card mt-3">
+                <div className="card mt-4">
+                    <div className="card-body">
+                        <h5 className="card-title">Số dư chưa phân bổ</h5>
+                        <hr/>
+                        <div className="d-flex justify-content-center align-items-center gap-3">
+                            <h4 onClick={()=>setOpenModal(true)}
+                                className="card-text d-flex justify-content-center text-warning">
+                                {util.getLocalCurrency(balance?.undefined)}
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+                <div className="card mt-4">
                     <div className="card-body">
                         <h5 className="card-title">Lịch sử</h5>
                         <hr/>
@@ -276,7 +283,7 @@ function DistributionManual({param}){
                 return item
             })
             param.setPackLst([...initStore])
-            param.changeFormAmount(amount)
+            // param.changeFormAmount(amount)
         }
     }, [])
 

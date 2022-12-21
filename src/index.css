@@ -81,3 +81,7 @@ code {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+.group .gr-body {
+  overflow-x: auto;
+}
