@@ -1,15 +1,20 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import DatePicker from "react-datepicker";
-import { storeData } from "../data/storeData";
 import { packService } from "../service/pack.service";
 import { util } from "../utility";
 import { AppContext } from "./Root";
 
-const Init_Form = {
+const New_Sub_Init_Form = {
     title: '',
     img: '',
     amount: 0,
+}
+const Outcome_Form = {
+    src: '',
+    amount: '',
+    note: 0,
+    date: new Date()
 }
 
 export default function OutCome() {
@@ -24,19 +29,21 @@ export default function OutCome() {
     const [subLst, setSubLst] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [newsubform , setNewsubform] = useState()
+    const [outcomeForm , setOutcomeForm] = useState()
 
     const selSubDetail = useMemo(()=>{
         return subLst.find(item => item.id === selSub.sub)
     }, [selSub])
 
     useEffect(()=>{
-        setNewsubform(Init_Form);
+        setNewsubform(New_Sub_Init_Form);
+        setOutcomeForm(Outcome_Form);
     },[])
 
     useEffect(()=>{
         setPackLst(balance?.packs);
     },[balance])
-
+    
     useEffect(()=>{
         if(packLst){ 
             let subs = packService.fetchSubs();
@@ -53,9 +60,19 @@ export default function OutCome() {
     }
 
     function handleChangeSubForm(e){
-        let name = e.target.name
-        let value =  e.target.value
+        var name = e.target.name
+        var value =  e.target.value
         setNewsubform({...newsubform, [name]: value})
+    }
+
+    function handleChangeOutcome(e) {
+        let name = "date"
+        let value = e
+        if(e.target){
+            name = e.target.name
+            value =  e.target.value
+        }
+        setOutcomeForm({...outcomeForm, [name]: value})
     }
 
     function handleSaveSubForm(e){
@@ -83,7 +100,7 @@ export default function OutCome() {
 
     function handleCloseModal(){ 
         setOpenModal(false)
-        setNewsubform(Init_Form)
+        setNewsubform(New_Sub_Init_Form)
         setSelSub({pack : 0, sub : 0})
     };
 
@@ -104,6 +121,7 @@ export default function OutCome() {
                         </div>
                         <div className="card-body">
                             <div className="row form mt-3">
+                            {   outcomeForm &&
                                 <Form className="
                                     col-lg-6 offset-lg-3
                                     col-md-8 offset-md-2
@@ -112,27 +130,37 @@ export default function OutCome() {
                                     
                                     <Form.Group className="mb-3" controlId="formSrc">
                                         <Form.Label>Nguồn</Form.Label>
-                                        <Form.Control name="src" type="text" value={selSubDetail?.title} readOnly={true}
+                                        <Form.Control name="src" type="text" 
+                                        value={selSubDetail?.title} 
+                                        onChange={handleChangeOutcome}
+                                        readOnly={true}
                                         />
                                     </Form.Group>
                                     <Form.Group className="mb-3" controlId="formAmount">
                                         <Form.Label>Số tiền</Form.Label>
                                         <Form.Control name="amount" type="number" 
                                             required={true}
+                                            value={outcomeForm.amount}
+                                            onChange={handleChangeOutcome}
                                         />
                                     </Form.Group>
                                     <Form.Group className="mb-3" controlId="formAmount">
                                         <Form.Label>Ghi chú</Form.Label>
                                         <Form.Control name="note" type="text" 
+                                        value={outcomeForm.note}
+                                        onChange={handleChangeOutcome}
                                         />
                                     </Form.Group>
-                                    <Form.Group controlId="formDate">
+                                    <Form.Group className="mb-3" controlId="formDate">
                                         <Form.Label>Ngày</Form.Label>
                                         <DatePicker 
+                                            name="date"
                                             className="form-control"
+                                            selected={outcomeForm.date}
+                                            onChange={handleChangeOutcome}
                                         />
                                     </Form.Group>
-                                </Form>
+                                </Form>}
                             </div>
                         </div>
                         <div className="card-footer d-flex justify-content-center gap-2">
