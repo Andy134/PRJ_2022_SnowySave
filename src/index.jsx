@@ -6,6 +6,7 @@ import {
   RouterProvider
 } from "react-router-dom";
 import "./index.css";
+import "react-datepicker/dist/react-datepicker.css";
 import ErrorPage from './pages/ErrorPage';
 import Root from './pages/Root';
 

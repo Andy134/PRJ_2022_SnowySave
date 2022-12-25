@@ -1,5 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
+import DatePicker from "react-datepicker";
 import { storeData } from "../data/storeData";
 import { packService } from "../service/pack.service";
 import { util } from "../utility";
@@ -8,7 +9,7 @@ import { AppContext } from "./Root";
 const Init_Form = {
     title: '',
     img: '',
-    amount: 0
+    amount: 0,
 }
 
 export default function OutCome() {
@@ -17,27 +18,30 @@ export default function OutCome() {
 
     // State, Effect
     const [packLst, setPackLst] = useState()
-    const [subLst, setSubLst] = useState([])
     const [selSub, setSelSub] = useState({
         pack : 0, sub : 0
     })
+    const [subLst, setSubLst] = useState([])
     const [openModal, setOpenModal] = useState(false)
-    const [newsubform , setNewsubform] = useState(Init_Form)
+    const [newsubform , setNewsubform] = useState()
 
     const selSubDetail = useMemo(()=>{
         return subLst.find(item => item.id === selSub.sub)
     }, [selSub])
 
+    useEffect(()=>{
+        setNewsubform(Init_Form);
+    },[])
 
     useEffect(()=>{
-        setPackLst(storeData);
-    },[])
+        setPackLst(balance?.packs);
+    },[balance])
 
     useEffect(()=>{
         if(packLst){ 
             let subs = packService.fetchSubs();
             console.log("Fetch subs: " + JSON.stringify(subs))
-            setSubLst(subs);
+            setSubLst([...subs]);
         }
     },[packLst])
 
@@ -96,7 +100,7 @@ export default function OutCome() {
                 <div className="col-md-12 col-lg-8">
                     <div className="card text-start">
                         <div className="card-header">
-                            <h5 className="card-title">Nạp tiền</h5>
+                            <h5 className="card-title">Chi tiền</h5>
                         </div>
                         <div className="card-body">
                             <div className="row form mt-3">
@@ -117,7 +121,17 @@ export default function OutCome() {
                                             required={true}
                                         />
                                     </Form.Group>
-                                    
+                                    <Form.Group className="mb-3" controlId="formAmount">
+                                        <Form.Label>Ghi chú</Form.Label>
+                                        <Form.Control name="note" type="text" 
+                                        />
+                                    </Form.Group>
+                                    <Form.Group controlId="formDate">
+                                        <Form.Label>Ngày</Form.Label>
+                                        <DatePicker 
+                                            className="form-control"
+                                        />
+                                    </Form.Group>
                                 </Form>
                             </div>
                         </div>
@@ -187,6 +201,7 @@ export default function OutCome() {
             </Modal.Header>
             <Modal.Body>
                 <Container>
+                    {newsubform &&
                     <Form id="newsubform" onSubmit={handleSaveSubForm}>
                         <Form.Group className="mb-3" controlId="formTitle">
                             <Form.Label>Title</Form.Label>
@@ -207,7 +222,7 @@ export default function OutCome() {
                                 <button type="button" className="btn btn-light">...</button>
                             </div>
                         </Form.Group>
-                    </Form>
+                    </Form>}
                 </Container>
             </Modal.Body>
             <Modal.Footer>
