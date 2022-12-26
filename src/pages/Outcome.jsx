@@ -13,9 +13,11 @@ const New_Sub_Init_Form = {
 const Outcome_Form = {
     src: '',
     amount: '',
-    note: 0,
-    date: new Date()
+    note: '',
+    date: new Date(),
+    type: "O"
 }
+const SELECT_SUB = { pack : null, sub : null}
 
 export default function OutCome() {
 
@@ -23,15 +25,13 @@ export default function OutCome() {
 
     // State, Effect
     const [packLst, setPackLst] = useState()
-    const [selSub, setSelSub] = useState({
-        pack : 0, sub : 0
-    })
+    const [selSub, setSelSub] = useState(SELECT_SUB)
     const [subLst, setSubLst] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [newsubform , setNewsubform] = useState()
     const [outcomeForm , setOutcomeForm] = useState()
 
-    const selSubDetail = useMemo(()=>{
+    const selSubDetail = useMemo((subLst)=>{
         return subLst.find(item => item.id === selSub.sub)
     }, [selSub])
 
@@ -98,6 +98,25 @@ export default function OutCome() {
         handleCloseModal();
     }
 
+    function handleSaveOutcome(e) {
+        e.preventDefault();
+        if(!selSubDetail){
+            alert("Hãy chọn sub!")
+            return;
+        }
+        outcomeForm.src =selSubDetail.title
+        console.log(outcomeForm)
+
+        packService.updateHistory(outcomeForm)
+    }
+
+    function handleResetOutcome(){
+        if(outcomeForm !== Outcome_Form){
+            setOutcomeForm(Outcome_Form);
+            setSelSub(SELECT_SUB);
+        }
+    }
+
     function handleCloseModal(){ 
         setOpenModal(false)
         setNewsubform(New_Sub_Init_Form)
@@ -111,10 +130,8 @@ export default function OutCome() {
 
     return <>
         <div className="outcome">
-
             <div className="row">
-                <div className="col-md-0 col-lg-2"></div>
-                <div className="col-md-12 col-lg-8">
+                <div className="col-12">
                     <div className="card text-start">
                         <div className="card-header">
                             <h5 className="card-title">Chi tiền</h5>
@@ -126,13 +143,16 @@ export default function OutCome() {
                                     col-lg-6 offset-lg-3
                                     col-md-8 offset-md-2
                                     col-sm-10 offset-sm-1" 
-                                    id="newIncomeForm">
+                                    id="newOutcomeForm"
+                                    onSubmit={handleSaveOutcome}
+                                    >
                                     
                                     <Form.Group className="mb-3" controlId="formSrc">
                                         <Form.Label>Nguồn</Form.Label>
                                         <Form.Control name="src" type="text" 
-                                        value={selSubDetail?.title} 
+                                        value={selSubDetail?.title || ''} 
                                         onChange={handleChangeOutcome}
+                                        required={true}
                                         readOnly={true}
                                         />
                                     </Form.Group>
@@ -164,10 +184,10 @@ export default function OutCome() {
                             </div>
                         </div>
                         <div className="card-footer d-flex justify-content-center gap-2">
-                            <Button variant="light" type="reset" form="newIncomeForm" >
+                            <Button variant="light" type="button" onClick={handleResetOutcome} >
                                 Xóa
                             </Button>
-                            <Button variant="warning" type="button" >
+                            <Button variant="warning" type="submit" form="newOutcomeForm">
                                 Lưu
                             </Button>
                         </div>
@@ -239,9 +259,7 @@ export default function OutCome() {
                                 onChange={handleChangeSubForm} 
                             />
                         </Form.Group>
-                        <Form.Group className="mb-3" controlId="formImage" 
-                                
-                        >
+                        <Form.Group className="mb-3" controlId="formImage">
                             <Form.Label>Image</Form.Label>
                             <div className="d-flex gap-2">
                                 <Form.Control name="img" type="text" 

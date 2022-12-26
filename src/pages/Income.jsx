@@ -229,7 +229,9 @@ export default function Income() {
                                             :
                                             <strong className="text-danger">- {util.getLocalCurrency(+item.amount)}</strong> 
                                         }
-                                        {item.src && ` - ${item.src}`}</span>
+                                        {item.src && ` - ${item.src}`}
+                                        {item.note && ` ( ${item.note} )`}    
+                                    </span>
                                     {/* <p className="text-muted">{moment(item.date).format('DD/MM/YYYY')}</p> */}
                                 </div>
                             </div>
@@ -276,7 +278,7 @@ function DistributionManual({param}){
     const [amount, setAmount] = useState(param.amount)
     const {balance} = useContext(AppContext)
 
-    useEffect(()=>{
+    useEffect((param)=>{
         return ()=>{
             let initStore = param.packLst.map((item)=>{
                 item.amount = 0
