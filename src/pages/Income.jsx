@@ -37,7 +37,8 @@ export default function Income() {
     function handleAutoDistribution() {
         // Balance
         let total = balance?.total || 0
-        let undef = balance?.undefined || 0
+        let undef = balance?.undefine || 0
+        let packs = balance?.packs || storeData;
 
         if(incomeForm.amount <= 0) {
             alert("Số tiền phải lớn hơn 0");
@@ -45,8 +46,6 @@ export default function Income() {
         }
 
         total = total + +incomeForm.amount
-
-        let packs = balance?.packs || storeData;
         packs = packs.map(item => {
             const percent = +item.percent
             let value =  (percent * incomeForm.amount) / 100
@@ -55,7 +54,7 @@ export default function Income() {
         })
 
         setBalance({...balance, total, packs})
-        packService.autoDistribution(total, packs, undef)
+        packService.distribution(total, packs, undef)
         // History
         history.unshift(incomeForm)
         packService.updateHistory(incomeForm)
@@ -67,7 +66,7 @@ export default function Income() {
     function handleDistribution() {
         let tempTotal = 0
         let total = balance?.total  || 0
-        let undef = balance?.undefined || 0
+        let undefine = balance?.undefine || 0
         packLst.forEach((item) => {
             tempTotal = tempTotal + +(item.amount || 0)
         })
@@ -77,7 +76,7 @@ export default function Income() {
         else{
             // Balance
             if(tempTotal < incomeForm.amount){
-                undef = undef + (incomeForm.amount - tempTotal)
+                undefine = undefine + (incomeForm.amount - tempTotal)
             }
             total = total + tempTotal
 
@@ -89,8 +88,8 @@ export default function Income() {
                 element.value = element.value + +amount
             });
 
-            setBalance({...balance, total, packs, undefined})
-            packService.autoDistribution(total, packs, undef)
+            setBalance({...balance, total, packs, undefine})
+            packService.distribution(total, packs, undefine)
 
              // History
             history.unshift(incomeForm)
@@ -211,7 +210,7 @@ export default function Income() {
                         <div className="d-flex justify-content-center align-items-center gap-3">
                             <h4 onClick={()=>setOpenModal(true)}
                                 className="card-text d-flex justify-content-center text-warning">
-                                {util.getLocalCurrency(balance?.undefined)}
+                                {util.getLocalCurrency(balance?.undefine)}
                             </h4>
                         </div>
                     </div>

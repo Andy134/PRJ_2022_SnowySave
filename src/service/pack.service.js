@@ -8,7 +8,7 @@ export const packService = {
     currentBalance,
     updateHistory,
     fetchHistory,
-    autoDistribution
+    distribution
 }
 
 // Balance
@@ -18,7 +18,7 @@ function currentBalance() {
     return balance || null
 }
 
-function autoDistribution(total, packs, undefine) {
+function distribution(total, packs, undefine) {
     var balance = JSON.parse(localStorage.getItem(BALANCE)) || {total: 0};
     balance = {...balance, total, packs, undefine};
     localStorage.setItem(BALANCE, JSON.stringify(balance));
@@ -59,7 +59,7 @@ function fetchHistory(){
 // ::: Balance 
 // {
 //     "total": 0,
-//     "undefined": 0,
+//     "undefine": 0,
 //     "packs": [
 //         {
 //             "id": 0,

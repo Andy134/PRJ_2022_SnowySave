@@ -11,7 +11,7 @@ export default function CommonHeader() {
         {`Số dư hiện tại: 
           ${util.getLocalCurrency(balance?.total)} 
           - Chưa phân bổ: 
-          ${util.getLocalCurrency(balance?.undefined)}`}
+          ${util.getLocalCurrency(balance?.undefine)}`}
       </div>
     </>
 }

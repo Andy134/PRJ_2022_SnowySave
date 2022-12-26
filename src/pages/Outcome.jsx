@@ -14,30 +14,36 @@ const Outcome_Form = {
     src: '',
     amount: '',
     note: '',
-    date: new Date(),
+    date: null,
     type: "O"
 }
-const SELECT_SUB = { pack : null, sub : null}
+const Select_Sub = { pack : null, sub : null}
 
 export default function OutCome() {
 
-    const {balance} = useContext(AppContext);
+    const {balance, setBalance} = useContext(AppContext);
 
     // State, Effect
     const [packLst, setPackLst] = useState()
-    const [selSub, setSelSub] = useState(SELECT_SUB)
+    const [selSub, setSelSub] = useState()
     const [subLst, setSubLst] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const [newsubform , setNewsubform] = useState()
     const [outcomeForm , setOutcomeForm] = useState()
 
-    const selSubDetail = useMemo((subLst)=>{
-        return subLst.find(item => item.id === selSub.sub)
-    }, [selSub])
+    const selSubDetail = useMemo(()=>{
+        console.log(1)
+        let pack = packLst?.find(item => item.id === selSub?.pack)
+        let sub = subLst?.find(item => item.id === selSub?.sub && item.packId === selSub?.pack)
+        if(sub) sub.pack = pack
+        return sub
+        // eslint-disable-next-line
+    }, [selSub]) 
 
     useEffect(()=>{
         setNewsubform(New_Sub_Init_Form);
         setOutcomeForm(Outcome_Form);
+        setSelSub(Select_Sub);
     },[])
 
     useEffect(()=>{
@@ -73,7 +79,7 @@ export default function OutCome() {
             value =  e.target.value
         }
         setOutcomeForm({...outcomeForm, [name]: value})
-    }
+    }   
 
     function handleSaveSubForm(e){
         e.preventDefault();
@@ -104,16 +110,42 @@ export default function OutCome() {
             alert("Hãy chọn sub!")
             return;
         }
-        outcomeForm.src =selSubDetail.title
-        console.log(outcomeForm)
+        if(!outcomeForm.date){
+            alert("Hãy chọn ngày!")
+            return;
+        }
+        outcomeForm.src = selSubDetail ? selSubDetail.pack.title + " - " + selSubDetail.title : 'Chi tiêu'
 
-        packService.updateHistory(outcomeForm)
+        const {pack} = selSub
+
+        var total = balance?.total
+        var undef = balance?.undefine
+        var packs = balance?.packs
+        
+        let currPack = packs.find((el)=>el.id === pack);
+        if(currPack){
+            if(currPack.value < outcomeForm.amount){
+                alert("Số dư của quỹ không đủ")
+                return;
+            }
+            total = +total - +outcomeForm.amount
+            currPack.value = currPack.value - +outcomeForm.amount
+
+            setBalance({...balance, total, packs})
+            packService.distribution(total, packs, undef)
+
+            packService.updateHistory(outcomeForm)
+            setOutcomeForm(Outcome_Form)
+        }
+        else{
+            alert("Error!")
+        }
     }
 
     function handleResetOutcome(){
         if(outcomeForm !== Outcome_Form){
             setOutcomeForm(Outcome_Form);
-            setSelSub(SELECT_SUB);
+            setSelSub(Select_Sub);
         }
     }
 
@@ -150,8 +182,7 @@ export default function OutCome() {
                                     <Form.Group className="mb-3" controlId="formSrc">
                                         <Form.Label>Nguồn</Form.Label>
                                         <Form.Control name="src" type="text" 
-                                        value={selSubDetail?.title || ''} 
-                                        onChange={handleChangeOutcome}
+                                        value={selSubDetail ? `${selSubDetail.pack.title} - ${selSubDetail.title}` : ''} 
                                         required={true}
                                         readOnly={true}
                                         />
@@ -177,6 +208,7 @@ export default function OutCome() {
                                             name="date"
                                             className="form-control"
                                             selected={outcomeForm.date}
+                                            maxDate={new Date()}
                                             onChange={handleChangeOutcome}
                                         />
                                     </Form.Group>
@@ -213,7 +245,7 @@ export default function OutCome() {
                                     subLst.filter((el)=>el.packId === item.id).map((subItem, idx)=>{
                                         return <div key={idx} 
                                                     className={`subPack p-2 
-                                                        ${(selSub.pack === item.id && selSub.sub === subItem.id) && "selected"}
+                                                        ${(selSub && selSub.pack === item.id && selSub.sub === subItem.id) && "selected"}
                                                     `}  
                                                     data-bs-toggle="tooltip" 
                                                     data-bs-placement="top" 
