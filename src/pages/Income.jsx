@@ -122,125 +122,128 @@ export default function Income() {
 
     return <>
         {/* Income */}
-        <div className="income row">
-            <div className="col-md-0 col-lg-2"></div>
-            <div className="col-md-12 col-lg-8">
-                <div className="card text-start">
-                    <div className="card-header">
-                        <h5 className="card-title">Nạp tiền</h5>
-                    </div>
-                    <div className="card-body">
-                        <div className="row form mt-3">
-                            <Form className="
-                                col-lg-6 offset-lg-3
-                                col-md-8 offset-md-2
-                                col-sm-10 offset-sm-1" 
-                                id="newIncomeForm">
-                                
-                                <Form.Group className="mb-3" controlId="formAmount">
-                                    <Form.Label>Số tiền</Form.Label>
-                                    <Form.Control name="amount" type="number" 
-                                        value={incomeForm.amount} 
-                                        onChange={handleChange}
-                                        required={true}
-                                    />
-                                </Form.Group>
-                                <Form.Group className="mb-3" controlId="formSrc">
-                                    <Form.Label>Nguồn</Form.Label>
-                                    <Form.Control name="src" type="text"  
-                                        value={incomeForm.src} 
-                                        onChange={handleChange}
-                                    />
-                                </Form.Group>
-                            </Form>
+        <div className="income">
+            <div className="row">
+                <div className="col-12">
+                    <div className="card text-start">
+                        <div className="card-header">
+                            <h5 className="card-title">Nạp tiền</h5>
                         </div>
-                    </div>
-                    <div className="card-footer d-flex justify-content-center gap-2">
-                        <Button variant="light" type="reset" form="newIncomeForm" onClick={handleReset}>
-                            Xóa
-                        </Button>
-                        <Button variant="warning" type="button" onClick={handleModal}>
-                            Phân bổ
-                        </Button>
-                        <Button variant="dark" type="button" onClick={handleAutoDistribution}>
-                            Phân bổ tự động
-                        </Button>
-                    </div>
-                </div>
-            </div>
-
-            <div className="col-md-6 col-sm-12 p-md-3 pt-sm-3">
-                <div className="packs card">
-                    <div className="card-body">
-                        <h5 className="card-title">Danh sách quỹ</h5>
-                        <hr/>
-                        {/* {balance?.packs?.map((item)=>{return <p key={item.id}>{JSON.stringify(item)}</p>})} */}
-                        {/* <div className="row g-4">
-                            {balance && balance.packs?.map((item, idx)=>{
-                                return <div key={idx} className="col-sm-12 col-md-6 col-lg-4">
-                                        <Pack item={item}/>
-                                        </div>
-                            })}
-                        </div> */}
-                        <div className="d-flex flex-column">
-                            {balance?.packs?.map((item)=>{
-                                return <Pack key={item.id} tyle={"list"} item={item}/>
-                            })}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="col-md-6 col-sm-12 p-md-3 pt-sm-3">
-                <div className="balance card">
-                    <div className="card-body">
-                        <h5 className="card-title">Thông tin số dư</h5>
-                        <hr/>
-                        <div className="d-flex justify-content-center align-items-center gap-3">
-                            <h4 className="card-text d-flex justify-content-center">
-                                {util.getLocalCurrency(balance?.total)}
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-                <div className="card mt-4">
-                    <div className="card-body">
-                        <h5 className="card-title">Số dư chưa phân bổ</h5>
-                        <hr/>
-                        <div className="d-flex justify-content-center align-items-center gap-3">
-                            <h4 onClick={()=>setOpenModal(true)}
-                                className="card-text d-flex justify-content-center text-warning">
-                                {util.getLocalCurrency(balance?.undefine)}
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-                <div className="card mt-4">
-                    <div className="card-body">
-                        <h5 className="card-title">Lịch sử</h5>
-                        <hr/>
-                        {history?.slice(0,5).map((item, idx)=>{
-                            return <div key={idx} >
-                                <div className={`history-item py-2 d-flex align-items-${item.type === "I" ? 'end' : 'start'} flex-column`} with={'100%'}>
-                                    <span>
-                                        {item.type === "I" ?
-                                            <strong className="text-success">+ {util.getLocalCurrency(+item.amount)}</strong> 
-                                            :
-                                            <strong className="text-danger">- {util.getLocalCurrency(+item.amount)}</strong> 
-                                        }
-                                        {item.src && ` - ${item.src}`}
-                                        {item.note && ` ( ${item.note} )`}    
-                                    </span>
-                                    {/* <p className="text-muted">{moment(item.date).format('DD/MM/YYYY')}</p> */}
-                                </div>
+                        <div className="card-body">
+                            <div className="row form mt-3">
+                                <Form className="
+                                    col-lg-6 offset-lg-3
+                                    col-md-8 offset-md-2
+                                    col-sm-10 offset-sm-1" 
+                                    id="newIncomeForm">
+                                    
+                                    <Form.Group className="mb-3" controlId="formAmount">
+                                        <Form.Label>Số tiền</Form.Label>
+                                        <Form.Control name="amount" type="number" 
+                                            value={incomeForm.amount} 
+                                            onChange={handleChange}
+                                            required={true}
+                                        />
+                                    </Form.Group>
+                                    <Form.Group className="mb-3" controlId="formSrc">
+                                        <Form.Label>Nguồn</Form.Label>
+                                        <Form.Control name="src" type="text"  
+                                            value={incomeForm.src} 
+                                            onChange={handleChange}
+                                        />
+                                    </Form.Group>
+                                </Form>
                             </div>
-                        })}
-                        <div className="d-flex justify-content-center mt-3">
-                            <Link className="link" to="/history">Xem thêm</Link>
+                        </div>
+                        <div className="card-footer d-flex justify-content-center gap-2">
+                            <Button variant="light" type="reset" form="newIncomeForm" onClick={handleReset}>
+                                Xóa
+                            </Button>
+                            <Button variant="warning" type="button" onClick={handleModal}>
+                                Phân bổ
+                            </Button>
+                            <Button variant="dark" type="button" onClick={handleAutoDistribution}>
+                                Phân bổ tự động
+                            </Button>
                         </div>
                     </div>
                 </div>
-                
+            </div>
+
+            <div className="row mb-4">
+                <div className="col-md-6 col-sm-12 mt-4">
+                    <div className="packs card">
+                        <div className="card-body">
+                            <h5 className="card-title">Danh sách quỹ</h5>
+                            <hr/>
+                            {/* {balance?.packs?.map((item)=>{return <p key={item.id}>{JSON.stringify(item)}</p>})} */}
+                            {/* <div className="row g-4">
+                                {balance && balance.packs?.map((item, idx)=>{
+                                    return <div key={idx} className="col-sm-12 col-md-6 col-lg-4">
+                                            <Pack item={item}/>
+                                            </div>
+                                })}
+                            </div> */}
+                            <div className="d-flex flex-column">
+                                {balance?.packs?.map((item)=>{
+                                    return <Pack key={item.id} tyle={"list"} item={item}/>
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-6 col-sm-12 mt-4">
+                    <div className="balance card">
+                        <div className="card-body">
+                            <h5 className="card-title">Thông tin số dư</h5>
+                            <hr/>
+                            <div className="d-flex justify-content-center align-items-center gap-3">
+                                <h4 className="card-text d-flex justify-content-center">
+                                    {util.getLocalCurrency(balance?.total)}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card mt-4">
+                        <div className="card-body">
+                            <h5 className="card-title">Số dư chưa phân bổ</h5>
+                            <hr/>
+                            <div className="d-flex justify-content-center align-items-center gap-3">
+                                <h4 onClick={()=>setOpenModal(true)}
+                                    className="card-text d-flex justify-content-center text-warning">
+                                    {util.getLocalCurrency(balance?.undefine)}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="card mt-4">
+                        <div className="card-body">
+                            <h5 className="card-title">Lịch sử</h5>
+                            <hr/>
+                            {history?.slice(0,5).map((item, idx)=>{
+                                return <div key={idx} >
+                                    <div className={`history-item py-2 d-flex align-items-${item.type === "I" ? 'end' : 'start'} flex-column`} with={'100%'}>
+                                        <span>
+                                            {item.type === "I" ?
+                                                <strong className="text-success">+ {util.getLocalCurrency(+item.amount)}</strong> 
+                                                :
+                                                <strong className="text-danger">- {util.getLocalCurrency(+item.amount)}</strong> 
+                                            }
+                                            {item.src && ` - ${item.src}`}
+                                            {item.note && ` ( ${item.note} )`}    
+                                        </span>
+                                        {/* <p className="text-muted">{moment(item.date).format('DD/MM/YYYY')}</p> */}
+                                    </div>
+                                </div>
+                            })}
+                            <div className="d-flex justify-content-center mt-3">
+                                <Link className="link" to="/history">Xem thêm</Link>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
             </div>
 
         </div>
@@ -277,7 +280,7 @@ function DistributionManual({param}){
     const [amount, setAmount] = useState(param.amount)
     const {balance} = useContext(AppContext)
 
-    useEffect((param)=>{
+    useEffect(()=>{
         return ()=>{
             let initStore = param.packLst.map((item)=>{
                 item.amount = 0

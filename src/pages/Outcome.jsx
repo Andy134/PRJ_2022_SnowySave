@@ -162,6 +162,7 @@ export default function OutCome() {
 
     return <>
         <div className="outcome">
+            {/* Outcome Form */}
             <div className="row">
                 <div className="col-12">
                     <div className="card text-start">
@@ -226,12 +227,12 @@ export default function OutCome() {
                     </div>
                 </div>
             </div>
-
-            {/* OutCome */}
-            <div className="outcome">
+            
+            {/* Outcome List */}
+            <div className="row mb-4">
             {
                 packLst?.map((item, idx)=>{
-                    return <div className="group" key={idx}>
+                    return <div className="group col-12 mt-4" key={idx}>
                             <div className="gr-name my-1 d-flex justify-item-content align-items-end">
                                 <img width="42px" src={`/assets/pack/${item.img}`} alt=""/>
                                 <h5 className="mb-0 ms-2">{item.title}</h5>
@@ -240,7 +241,7 @@ export default function OutCome() {
                                     }</h5>
                                 }
                             </div>
-                            <div className="gr-body mb-5 py-1 d-flex gap-2">
+                            <div className="gr-body d-flex gap-4">
                                 {
                                     subLst.filter((el)=>el.packId === item.id).map((subItem, idx)=>{
                                         return <div key={idx} 
