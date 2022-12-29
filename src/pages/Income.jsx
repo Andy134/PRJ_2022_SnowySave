@@ -1,3 +1,4 @@
+import { collection, connectFirestoreEmulator } from "firebase/firestore/lite";
 import { useContext, useEffect, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -21,11 +22,16 @@ export default function Income() {
     const [packLst, setPackLst] = useState()
     const [openModal, setOpenModal] = useState(false)
     
-    const {balance, setBalance} = useContext(AppContext); 
+    const {balance, setBalance, getBalance} = useContext(AppContext);
+
+    const [appBalance, setAppBalance] = useState()
 
     useEffect(()=>{
         setPackLst(storeData)
         setHistory(packService.fetchHistory())
+        getBalance().then((res) => {
+            console.log(res)
+        })
     },[])
 
     function handleReset(){
