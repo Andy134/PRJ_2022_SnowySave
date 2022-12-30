@@ -289,6 +289,7 @@ function DistributionManual({param}){
             param.setPackLst([...initStore])
             // param.changeFormAmount(amount)
         }
+    // eslint-disable-next-line
     }, [])
 
     function handleChangeAmount(e) {
