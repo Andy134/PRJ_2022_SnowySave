@@ -1,10 +1,10 @@
+import { initializeApp } from 'firebase/app';
+import { collection, doc, getDocs, getFirestore } from 'firebase/firestore/lite';
 import { createContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import CommonHeader from "../components/CommonHeader";
 import MyNavbar from "../components/MyNavbar";
 import { packService } from "../service/pack.service";
-import { initializeApp } from 'firebase/app';
-import { collection, doc, getDoc, getDocs, getFirestore } from 'firebase/firestore/lite';
 export const AppContext = createContext() 
 
 const firebaseConfig = {
@@ -20,7 +20,6 @@ const firebase = initializeApp(firebaseConfig);
 const db = getFirestore(firebase);
 
 export default function Root() {
-  
   
   const [balance, setBalance] = useState(null)
 
