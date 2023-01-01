@@ -1,10 +1,10 @@
 import { initializeApp } from 'firebase/app';
-import { collection, doc, getDocs, getFirestore } from 'firebase/firestore/lite';
+import { doc, getDoc, getFirestore } from 'firebase/firestore/lite';
 import { createContext, useEffect, useState } from "react";
 import { Outlet } from "react-router-dom";
 import CommonHeader from "../components/CommonHeader";
 import MyNavbar from "../components/MyNavbar";
-import { packService } from "../service/pack.service";
+import {packService} from "../service/pack.service"
 export const AppContext = createContext() 
 
 const firebaseConfig = {
@@ -24,22 +24,16 @@ export default function Root() {
   const [balance, setBalance] = useState(null)
 
   useEffect(()=>{
-    setBalance(
-        packService.currentBalance() || null
-    );
+    getBalance()
   },[])
 
   // Get balance from your database
   async function getBalance() {
     const docRef = doc(db, "balance", "data");
-    const packRef = collection(docRef, "packs");
-    const querySnapshot = await getDocs(packRef);
-    if (querySnapshot.length>0) {
-      return querySnapshot;
-    } else {
-      // doc.data() will be undefined in this case
-      console.log("No such document!");
-      return null;
+    const docSnap = await getDoc(docRef);
+    if (docSnap.exists()) {
+      console.log(docSnap.data())
+      setBalance(docSnap.data());
     }
   }
 

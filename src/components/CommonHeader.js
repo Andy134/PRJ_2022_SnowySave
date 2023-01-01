@@ -8,10 +8,12 @@ export default function CommonHeader() {
 
     return <>
         <div className="container mt-3 mb-3 d-flex justify-content-end">
-        {`Số dư hiện tại: 
-          ${util.getLocalCurrency(balance?.total)} 
-          - Chưa phân bổ: 
-          ${util.getLocalCurrency(balance?.undefine)}`}
+        {
+          `Số dư hiện tại: ${util.getLocalCurrency(balance?.total)} `
+        }
+        {/* {
+          `- Chưa phân bổ: ${util.getLocalCurrency(balance?.undefine)}`
+        } */}
       </div>
     </>
 }

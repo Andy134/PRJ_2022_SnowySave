@@ -206,7 +206,7 @@ export default function Income() {
                             </div>
                         </div>
                     </div>
-                    <div className="card mt-4">
+                    {/* <div className="card mt-4">
                         <div className="card-body">
                             <h5 className="card-title">Số dư chưa phân bổ</h5>
                             <hr/>
@@ -217,7 +217,7 @@ export default function Income() {
                                 </h4>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     <div className="card mt-4">
                         <div className="card-body">
                             <h5 className="card-title">Lịch sử</h5>
