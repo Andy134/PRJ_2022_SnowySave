@@ -21,11 +21,12 @@ export default function Income() {
     const [packLst, setPackLst] = useState()
     const [openModal, setOpenModal] = useState(false)
     
-    const {balance, setBalance} = useContext(AppContext); 
+    const {balance, setBalance} = useContext(AppContext);
 
     useEffect(()=>{
         setPackLst(storeData)
         setHistory(packService.fetchHistory())
+    // eslint-disable-next-line
     },[])
 
     function handleReset(){
@@ -37,9 +38,7 @@ export default function Income() {
     function handleAutoDistribution() {
         // Balance
         let total = balance?.total || 0
-        let undef = balance?.undefine || 0
         let packs = balance?.packs || storeData;
-
         if(incomeForm.amount <= 0) {
             alert("Số tiền phải lớn hơn 0");
             return;
@@ -54,7 +53,7 @@ export default function Income() {
         })
 
         setBalance({...balance, total, packs})
-        packService.distribution(total, packs, undef)
+        packService.distribution({...balance, total, packs})
         // History
         history.unshift(incomeForm)
         packService.updateHistory(incomeForm)
@@ -66,18 +65,14 @@ export default function Income() {
     function handleDistribution() {
         let tempTotal = 0
         let total = balance?.total  || 0
-        let undefine = balance?.undefine || 0
         packLst.forEach((item) => {
             tempTotal = tempTotal + +(item.amount || 0)
         })
-        if(tempTotal > incomeForm.amount){
-            alert("Phân bổ nhiều hơn số tiền nhập vào: " + util.getLocalCurrency(tempTotal - incomeForm.amount))
+        if(+tempTotal !== +incomeForm.amount){
+            alert("Phân bổ chưa đạt số tiền nhập vào")
         }
         else{
             // Balance
-            if(tempTotal < incomeForm.amount){
-                undefine = undefine + (incomeForm.amount - tempTotal)
-            }
             total = total + tempTotal
 
             let packs = balance?.packs || storeData;
@@ -88,8 +83,8 @@ export default function Income() {
                 element.value = element.value + +amount
             });
 
-            setBalance({...balance, total, packs, undefine})
-            packService.distribution(total, packs, undefine)
+            setBalance({...balance, total, packs})
+            packService.distribution({...balance, total, packs})
 
              // History
             history.unshift(incomeForm)
@@ -108,11 +103,12 @@ export default function Income() {
     }
 
     function handleModal(){
+        if(!openModal)
         // Balance
-        // if(incomeForm.amount <= 0) {
-        //     alert("Số tiền phải lớn hơn 0");
-        //     return;
-        // }
+        if(incomeForm.amount <= 0) {
+            alert("Số tiền phải lớn hơn 0");
+            return;
+        }
         setOpenModal(!openModal)
     }
 
@@ -176,17 +172,9 @@ export default function Income() {
                         <div className="card-body">
                             <h5 className="card-title">Danh sách quỹ</h5>
                             <hr/>
-                            {/* {balance?.packs?.map((item)=>{return <p key={item.id}>{JSON.stringify(item)}</p>})} */}
-                            {/* <div className="row g-4">
-                                {balance && balance.packs?.map((item, idx)=>{
-                                    return <div key={idx} className="col-sm-12 col-md-6 col-lg-4">
-                                            <Pack item={item}/>
-                                            </div>
-                                })}
-                            </div> */}
                             <div className="d-flex flex-column">
-                                {balance?.packs?.map((item)=>{
-                                    return <Pack key={item.id} tyle={"list"} item={item}/>
+                                {balance?.packs?.map((item, key)=>{
+                                    return <Pack key={key} tyle={"list"} item={item}/>
                                 })}
                             </div>
                         </div>
@@ -201,18 +189,6 @@ export default function Income() {
                             <div className="d-flex justify-content-center align-items-center gap-3">
                                 <h4 className="card-text d-flex justify-content-center">
                                     {util.getLocalCurrency(balance?.total)}
-                                </h4>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card mt-4">
-                        <div className="card-body">
-                            <h5 className="card-title">Số dư chưa phân bổ</h5>
-                            <hr/>
-                            <div className="d-flex justify-content-center align-items-center gap-3">
-                                <h4 onClick={()=>setOpenModal(true)}
-                                    className="card-text d-flex justify-content-center text-warning">
-                                    {util.getLocalCurrency(balance?.undefine)}
                                 </h4>
                             </div>
                         </div>
@@ -287,14 +263,10 @@ function DistributionManual({param}){
                 return item
             })
             param.setPackLst([...initStore])
-            // param.changeFormAmount(amount)
         }
     // eslint-disable-next-line
+    // eslint-disable-next-line    
     }, [])
-
-    function handleChangeAmount(e) {
-        setAmount(+e.target.value)
-    }
 
     function handleInput(e) {
         let id = +e.target.name.replace('input-','')
@@ -302,6 +274,7 @@ function DistributionManual({param}){
         let pack = param.packLst.find((item)=>item.id === id)
         pack.amount = value
         param.setPackLst([...param.packLst])
+        setAmount()
     }
 
     return <>
@@ -316,7 +289,7 @@ function DistributionManual({param}){
                 <Form.Control type="number" 
                     name="amount"
                     value={amount}
-                    onChange={handleChangeAmount} 
+                    readOnly={true}
                 />
             </Form.Group>
 
