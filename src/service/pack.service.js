@@ -1,4 +1,6 @@
-const BALANCE = "BALANCE";
+import { doc, getDoc, setDoc } from "firebase/firestore/lite";
+import { db } from "../firebaseConfig";
+
 const SUB_LIST = "SUB_LIST";
 const HISTORY = "HISTORY";
 
@@ -8,20 +10,26 @@ export const packService = {
     currentBalance,
     updateHistory,
     fetchHistory,
-    distribution
+    distribution,
 }
 
 // Balance
 
-function currentBalance() {
-    var balance = JSON.parse(localStorage.getItem(BALANCE)) || null;
-    return balance || null
+// Get balance from your database
+async function currentBalance() {
+  console.log("Fetch Balance :::")
+  const docRef = doc(db, "balance", "data");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  }
+  else return null
 }
 
-function distribution(total, packs, undefine) {
-    var balance = JSON.parse(localStorage.getItem(BALANCE)) || {total: 0};
-    balance = {...balance, total, packs, undefine};
-    localStorage.setItem(BALANCE, JSON.stringify(balance));
+async function distribution(pBalance) {
+  console.log("Distribution :::");
+  const docRef = doc(db, "balance", "data");
+  await setDoc(docRef, pBalance);
 }
 
 // Sub
