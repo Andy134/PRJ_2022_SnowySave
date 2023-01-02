@@ -1,13 +1,60 @@
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 import { auth } from "../firebaseConfig";
+import { AppContext } from "../pages/Root";
 import { authService } from "../service/auth.service";
+import { packService } from "../service/pack.service";
+import { util } from "../utility";
 
 export default function MyNavbar() {
 
+    const {balance, setBalance, setHistory} = useContext(AppContext);
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
+
+    function handleResetBalance() {
+        util.confirmSAlert(
+          ()=>{
+            balance.total = 0
+            balance?.packs.forEach(element => {
+              element.value = 0
+            });
+            // setBalance({...balance})
+            setBalance({...balance})
+            packService.distribution({...balance}).then(()=>{
+              util.saveSuccess("Reset sucessfully !")
+            })
+          },
+        "Reset Balance ?",
+      )
+    }
+
+    function handleResetHistory() {
+      util.confirmSAlert(
+        ()=>{
+          setHistory([])
+          packService.resetHistory().then(()=>{
+            Swal.fire('Reset sucessfully !',"","success");
+          })
+        },
+        "Reset History ?",
+      )
+    }
+
+    function handleResetSub() {
+      util.confirmSAlert(
+        ()=>{
+          packService.resetSubs().then(()=>{
+            Swal.fire('Reset sucessfully !',"","success");
+            navigate('/');
+          })
+        },
+        "Reset Subsidiary ?",
+      )
+    }
+
 
     useEffect(() => {
         if (!user) return navigate("/");
@@ -45,16 +92,13 @@ export default function MyNavbar() {
                             {user?.email}
                         </button >
                         <div className="dropdown-menu" aria-labelledby="dropdownId">
-                            <Link className="dropdown-item" >Action 1</Link>
-                            <Link className="dropdown-item" >Action 2</Link>
+                            <Link className="dropdown-item"  onClick={handleResetBalance}>Reset Balance</Link>
+                            <Link className="dropdown-item"  onClick={handleResetSub}>Reset Sub</Link>
+                            <Link className="dropdown-item"  onClick={handleResetHistory}>Reset History</Link>
                             <hr/>
                             <Link className="dropdown-item" onClick={authService.logout}>Log out</Link>
                         </div>
                     </div>
-                    {/* <form className="d-flex my-2 my-lg-0">
-                    <input className="form-control me-sm-2" type="text" placeholder="Search"/>
-                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-                    </form> */}
                 </div>
             </div>
          </nav>

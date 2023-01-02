@@ -14,6 +14,7 @@ import Packs from './pages/Packs';
 import Income from './pages/Income';
 import Outcome from './pages/Outcome';
 import Login from './pages/Login';
+import Reset from './pages/Reset';
 
 
 const router = createBrowserRouter([
@@ -39,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <Login />,
+  },
+  {
+    path: "/reset",
+    element: <Reset />,
   },
 ]);
 

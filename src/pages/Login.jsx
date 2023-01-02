@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "./../firebaseConfig";
 import { useAuthState } from "react-firebase-hooks/auth";
-import "./../assets/Login.css";
 import { authService } from "../service/auth.service";
+import Loading from "../components/Loading";
+import "./../assets/Login.css"
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -15,7 +16,7 @@ function Login() {
     // eslint-disable-next-line  
     }, [user]);
     return (<>
-        {loading  && <div width="100%" className="d-flex justify-content-center align-items-center">Loading...</div>}
+        {loading  && <Loading/>}
         {loading || <div className="login">
             <div className="login__container">
             <input
