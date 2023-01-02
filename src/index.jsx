@@ -5,7 +5,7 @@ import {
   createBrowserRouter,
   RouterProvider
 } from "react-router-dom";
-import "./index.css";
+import "./assets/index.css";
 import "react-datepicker/dist/react-datepicker.css";
 import ErrorPage from './pages/ErrorPage';
 import Root from './pages/Root';
@@ -13,11 +13,12 @@ import Root from './pages/Root';
 import Packs from './pages/Packs';
 import Income from './pages/Income';
 import Outcome from './pages/Outcome';
+import Login from './pages/Login';
 
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: "dashboard",
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
@@ -26,19 +27,19 @@ const router = createBrowserRouter([
         element: <Packs />,
       },
       {
-        path: "/income",
+        path: "income",
         element: <Income />,
       },
       {
-        path: "/outcome",
+        path: "outcome",
         element: <Outcome />,
       },
     ],
   },
-  // {
-  //   path: "contact",
-  //   element: <Login />,
-  // },
+  {
+    path: "/",
+    element: <Login />,
+  },
 ]);
 
 

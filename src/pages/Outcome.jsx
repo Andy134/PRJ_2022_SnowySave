@@ -99,7 +99,6 @@ export default function OutCome() {
             ...newsubform, id, packId
         }
         subLst.push(newSub)
-        console.log(subs)
         packService.saveSubs({data : subLst})
 
         handleCloseModal();

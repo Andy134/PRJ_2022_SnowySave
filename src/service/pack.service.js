@@ -50,7 +50,6 @@ async function resetSubs() {
   if (docSnap.exists()) {
     let subs = docSnap.data();
     let {data} = subs
-    console.log(data)
     let initData = data.filter((el)=>el.id === 0)
     await setDoc(docRef, {data: initData});
   }

@@ -12,11 +12,9 @@ export default function Root() {
 
   useEffect(()=>{
     packService.currentBalance().then((resp)=>{
-      console.log(resp)
       setBalance(resp)
     });
     packService.fetchHistory().then((resp)=>{
-      console.log(resp)
       setHistory(resp.data)
     });
   },[])
