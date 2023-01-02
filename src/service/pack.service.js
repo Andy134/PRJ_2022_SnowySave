@@ -1,21 +1,18 @@
 import { doc, getDoc, setDoc } from "firebase/firestore/lite";
 import { db } from "../firebaseConfig";
 
-const SUB_LIST = "SUB_LIST";
-const HISTORY = "HISTORY";
-
 export const packService = {
-    fetchSubs,
-    saveSubs,
-    currentBalance,
-    updateHistory,
-    fetchHistory,
-    distribution,
+  fetchSubs,
+  saveSubs,
+  resetSubs,
+  currentBalance,
+  updateHistory,
+  fetchHistory,
+  resetHistory,
+  distribution,
 }
 
 // Balance
-
-// Get balance from your database
 async function currentBalance() {
   console.log("Fetch Balance :::")
   const docRef = doc(db, "balance", "data");
@@ -25,7 +22,6 @@ async function currentBalance() {
   }
   else return null
 }
-
 async function distribution(pBalance) {
   console.log("Distribution :::");
   const docRef = doc(db, "balance", "data");
@@ -33,41 +29,62 @@ async function distribution(pBalance) {
 }
 
 // Sub
-
-function fetchSubs(packId) {
-    var subs = JSON.parse(localStorage.getItem(SUB_LIST)) || [];
-    if(packId && subs){
-        subs = [].concat(subs).filter((el)=>el.packId === packId)
-    }
-    return subs
+async function fetchSubs() {
+  console.log("Fetch Subs :::")
+  const docRef = doc(db, "balance", "subs");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  }
+  else return null;
 }
-
-function saveSubs(data) {
-    const subs = JSON.stringify(data);
-    localStorage.setItem(SUB_LIST, subs)
-    return subs
+async function saveSubs(data) {
+  console.log("Save Subs :::");
+  const docRef = doc(db, "balance", "subs");
+  await setDoc(docRef, data);
+}
+async function resetSubs() {
+  console.log("Reset Subs :::");
+  const docRef = doc(db, "balance", "subs");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    let subs = docSnap.data();
+    let {data} = subs
+    console.log(data)
+    let initData = data.filter((el)=>el.id === 0)
+    await setDoc(docRef, {data: initData});
+  }
 }
 
 // History
-
-function updateHistory(param){
-    var history = JSON.parse(localStorage.getItem(HISTORY)) || []
-    param.date = new Date();
-    history?.unshift(param)
-    localStorage.setItem(HISTORY, JSON.stringify(history))
+async function fetchHistory(){
+  console.log("Fetch History :::")
+  const docRef = doc(db, "balance", "history");
+  const docSnap = await getDoc(docRef);
+  if (docSnap.exists()) {
+    return docSnap.data();
+  }
+  else return null;
 }
-
-function fetchHistory(){
-    var history = JSON.parse(localStorage.getItem(HISTORY)) || []
-    return history?.slice(0,5)
+async function updateHistory(data){
+  fetchHistory().then((resp)=>{
+    if(resp.data) {
+      let history = resp.data
+      history.unshift(data)
+      console.log("Save History :::");
+      const docRef = doc(db, "balance", "history");
+      setDoc(docRef, {data: history});
+    }
+  })
 }
-
-
-
+async function resetHistory(){
+  console.log("Reset History :::");
+  const docRef = doc(db, "balance", "history");
+  setDoc(docRef, {data: []});
+}
 // ::: Balance 
 // {
 //     "total": 0,
-//     "undefine": 0,
 //     "packs": [
 //         {
 //             "id": 0,
@@ -119,16 +136,16 @@ function fetchHistory(){
 
 // ::: History 
 
-//     [
-//         {
-//             "source": "food.png",
-//             "amount": 3000,
-//             "date":null,
-            //    "type": "I" ,
-//         },
-//         {
-//             "source": "food.png",
-//             "amount": 3000
-            //    "type": "O" ,
-//         }
-//      ]
+// [
+//   {
+//     "source": "food.png",
+//     "amount": 3000,
+//     "date":null,
+//         "type": "I" ,
+//   },
+//   {
+//     "source": "food.png",
+//     "amount": 3000,
+//     "type": "O" ,
+//   }
+// ]

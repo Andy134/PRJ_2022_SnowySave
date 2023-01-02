@@ -14,27 +14,18 @@ const initIncomeForm = {
 }
 
 export default function Income() {
-
     // State, Effect
     const [incomeForm, setIncomeForm] = useState(initIncomeForm)
-    const [history, setHistory] = useState([])
+    // const [history, setHistory] = useState([])
     const [packLst, setPackLst] = useState()
     const [openModal, setOpenModal] = useState(false)
-    
-    const {balance, setBalance} = useContext(AppContext);
-
-    useEffect(()=>{
-        setPackLst(storeData)
-        setHistory(packService.fetchHistory())
-    // eslint-disable-next-line
-    },[])
+    const {balance, setBalance, history, setHistory} = useContext(AppContext);
 
     function handleReset(){
         if(incomeForm !== initIncomeForm){
             setIncomeForm(initIncomeForm)
         }
     }
-
     function handleAutoDistribution() {
         // Balance
         let total = balance?.total || 0
@@ -43,7 +34,6 @@ export default function Income() {
             alert("Số tiền phải lớn hơn 0");
             return;
         }
-
         total = total + +incomeForm.amount
         packs = packs.map(item => {
             const percent = +item.percent
@@ -51,17 +41,14 @@ export default function Income() {
             item.value = (item.value || 0) + value
             return item
         })
-
         setBalance({...balance, total, packs})
         packService.distribution({...balance, total, packs})
         // History
         history.unshift(incomeForm)
         packService.updateHistory(incomeForm)
         setHistory([...history])
-
         setIncomeForm(initIncomeForm)
     }
-
     function handleDistribution() {
         let tempTotal = 0
         let total = balance?.total  || 0
@@ -85,7 +72,6 @@ export default function Income() {
 
             setBalance({...balance, total, packs})
             packService.distribution({...balance, total, packs})
-
              // History
             history.unshift(incomeForm)
             packService.updateHistory(incomeForm)
@@ -93,15 +79,12 @@ export default function Income() {
             setOpenModal(false)
             setIncomeForm(initIncomeForm)
         }
-        
     }
-
     function handleChange(e){
         const name = e.target.name;
         const value = e.target.value;
         setIncomeForm({...incomeForm, [name]: value})
     }
-
     function handleModal(){
         if(!openModal)
         // Balance
@@ -111,11 +94,9 @@ export default function Income() {
         }
         setOpenModal(!openModal)
     }
-
     function changeFormAmount(value){
         setIncomeForm({...incomeForm, amount: value})
     }
-
     return <>
         {/* Income */}
         <div className="income">
@@ -152,7 +133,7 @@ export default function Income() {
                             </div>
                         </div>
                         <div className="card-footer d-flex justify-content-center gap-2">
-                            <Button variant="light" type="reset" form="newIncomeForm" onClick={handleReset}>
+                            <Button variant="secondary" type="reset" form="newIncomeForm" onClick={handleReset}>
                                 Xóa
                             </Button>
                             <Button variant="warning" type="button" onClick={handleModal}>
@@ -193,6 +174,7 @@ export default function Income() {
                             </div>
                         </div>
                     </div>
+                    
                     <div className="card mt-4">
                         <div className="card-body">
                             <h5 className="card-title">Lịch sử</h5>

@@ -4,6 +4,7 @@ import DatePicker from "react-datepicker";
 import { packService } from "../service/pack.service";
 import { util } from "../utility";
 import { AppContext } from "./Root";
+import { outcomeList } from "../data/outcomeList";
 
 const New_Sub_Init_Form = {
     title: '',
@@ -30,13 +31,14 @@ export default function OutCome() {
     const [openModal, setOpenModal] = useState(false)
     const [newsubform , setNewsubform] = useState()
     const [outcomeForm , setOutcomeForm] = useState()
+    const [ocList, setOCList] = useState([])
 
     const selSubDetail = useMemo(()=>{
-        console.log(1)
         let pack = packLst?.find(item => item.id === selSub?.pack)
         let sub = subLst?.find(item => item.id === selSub?.sub && item.packId === selSub?.pack)
-        if(sub) sub.pack = pack
-        return sub
+        if(sub){ 
+            return {...sub, pack : pack}
+        }
         // eslint-disable-next-line
     }, [selSub]) 
 
@@ -44,6 +46,7 @@ export default function OutCome() {
         setNewsubform(New_Sub_Init_Form);
         setOutcomeForm(Outcome_Form);
         setSelSub(Select_Sub);
+        setOCList(outcomeList);
     },[])
 
     useEffect(()=>{
@@ -52,16 +55,16 @@ export default function OutCome() {
     
     useEffect(()=>{
         if(packLst){ 
-            let subs = packService.fetchSubs();
-            console.log("Fetch subs: " + JSON.stringify(subs))
-            setSubLst([...subs]);
+            packService.fetchSubs().then((resp)=>{
+                let subs = resp.data
+                setSubLst([...subs]);
+            });
         }
     },[packLst])
 
     // Handle
 
     function setSelectedSub(pack, sub){
-        console.log(pack + "-" + sub);
         setSelSub({pack, sub});
     }
 
@@ -85,7 +88,6 @@ export default function OutCome() {
         e.preventDefault();
         
         let currentPack = packLst.find((el)=>el.id === selSub.pack)
-        console.log(currentPack)
 
         let subs = subLst ? subLst.filter((el)=>el.packId === currentPack.id) : null
 
@@ -96,10 +98,9 @@ export default function OutCome() {
         let newSub = {
             ...newsubform, id, packId
         }
-
-        console.log(newSub)
         subLst.push(newSub)
-        packService.saveSubs(subLst)
+        console.log(subs)
+        packService.saveSubs({data : subLst})
 
         handleCloseModal();
     }
@@ -119,7 +120,6 @@ export default function OutCome() {
         const {pack} = selSub
 
         var total = balance?.total
-        var undef = balance?.undefine
         var packs = balance?.packs
         
         let currPack = packs.find((el)=>el.id === pack);
@@ -132,7 +132,7 @@ export default function OutCome() {
             currPack.value = currPack.value - +outcomeForm.amount
 
             setBalance({...balance, total, packs})
-            packService.distribution(total, packs, undef)
+            packService.distribution({...balance, total, packs})
 
             packService.updateHistory(outcomeForm)
             setOutcomeForm(Outcome_Form)
@@ -295,10 +295,16 @@ export default function OutCome() {
                         <Form.Group className="mb-3" controlId="formImage">
                             <Form.Label>Image</Form.Label>
                             <div className="d-flex gap-2">
-                                <Form.Control name="img" type="text" 
+                                <select name="img" className="form-select" aria-label="Default select example" value={newsubform.img} onChange={handleChangeSubForm}>
+                                    <option value={null}>Open this select menu</option>
+                                    {ocList?.map((item, idx) => {
+                                        return <option key={idx} value={item.img}>{item.name}</option>
+                                    })}
+                                </select>
+
+                                {/* <Form.Control name="img" type="text" 
                                     value={newsubform.img}
-                                    onChange={handleChangeSubForm} />
-                                <button type="button" className="btn btn-light">...</button>
+                                    onChange={handleChangeSubForm} /> */}
                             </div>
                         </Form.Group>
                     </Form>}

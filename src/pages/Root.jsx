@@ -8,17 +8,24 @@ export const AppContext = createContext()
 export default function Root() {
   
   const [balance, setBalance] = useState(null)
+  const [history, setHistory] = useState([])
 
   useEffect(()=>{
     packService.currentBalance().then((resp)=>{
       console.log(resp)
       setBalance(resp)
     });
+    packService.fetchHistory().then((resp)=>{
+      console.log(resp)
+      setHistory(resp.data)
+    });
   },[])
 
   const appValue = {
     balance,
-    setBalance
+    setBalance,
+    history, 
+    setHistory,
   }
 
   return (
