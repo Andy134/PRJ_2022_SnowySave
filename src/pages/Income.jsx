@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Pack from "../components/Pack";
@@ -16,8 +16,7 @@ const initIncomeForm = {
 export default function Income() {
     // State, Effect
     const [incomeForm, setIncomeForm] = useState(initIncomeForm)
-    // const [history, setHistory] = useState([])
-    const [packLst, setPackLst] = useState()
+    const [packLst, setPackLst] = useState(null)
     const [openModal, setOpenModal] = useState(false)
     const {balance, setBalance, history, setHistory} = useContext(AppContext);
 
@@ -27,34 +26,41 @@ export default function Income() {
         }
     }
     function handleAutoDistribution() {
-        // Balance
-        let total = balance?.total || 0
-        let packs = balance?.packs || storeData;
-        if(incomeForm.amount <= 0) {
-            alert("Số tiền phải lớn hơn 0");
-            return;
-        }
-        total = total + +incomeForm.amount
-        packs = packs.map(item => {
-            const percent = +item.percent
-            let value =  (percent * incomeForm.amount) / 100
-            item.value = (item.value || 0) + value
-            return item
-        })
-        setBalance({...balance, total, packs})
-        packService.distribution({...balance, total, packs})
-        // History
-        history.unshift(incomeForm)
-        packService.updateHistory(incomeForm)
-        setHistory([...history])
-        setIncomeForm(initIncomeForm)
+        util.confirmSAlert(
+            ()=>{
+                // Balance
+                let total = balance?.total || 0
+                let packs = balance?.packs || storeData;
+                if(+incomeForm.amount <= 0) {
+                    alert("Số tiền phải lớn hơn 0");
+                    return;
+                }
+                total = total + +incomeForm.amount
+                packs = packs.map(item => {
+                    const percent = +item.percent
+                    let value =  (percent * incomeForm.amount) / 100
+                    item.value = (item.value || 0) + value
+                    return item
+                })
+                setBalance({...balance, total, packs})
+                packService.distribution({...balance, total, packs})
+                // History
+                history.unshift(incomeForm)
+                packService.updateHistory(incomeForm)
+                setHistory([...history])
+                setIncomeForm(initIncomeForm)
+            },
+          "Tự động phân bổ ?",
+        )
     }
     function handleDistribution() {
         let tempTotal = 0
         let total = balance?.total  || 0
         packLst.forEach((item) => {
-            tempTotal = tempTotal + +(item.amount || 0)
+            tempTotal = tempTotal + +(item.value || 0)
         })
+        console.log(tempTotal);
+        console.log(incomeForm.amount);
         if(+tempTotal !== +incomeForm.amount){
             alert("Phân bổ chưa đạt số tiền nhập vào")
         }
@@ -93,9 +99,6 @@ export default function Income() {
             return;
         }
         setOpenModal(!openModal)
-    }
-    function changeFormAmount(value){
-        setIncomeForm({...incomeForm, amount: value})
     }
     return <>
         {/* Income */}
@@ -214,8 +217,7 @@ export default function Income() {
             <Modal.Body>
                 <Container>
                     <DistributionManual param={{ 
-                        amount : incomeForm.amount, 
-                        changeFormAmount,
+                        amount : incomeForm.amount,
                         packLst, 
                         setPackLst    
                     }}/>
@@ -238,23 +240,12 @@ function DistributionManual({param}){
     const [amount, setAmount] = useState(param.amount)
     const {balance} = useContext(AppContext)
 
-    useEffect(()=>{
-        return ()=>{
-            let initStore = param.packLst.map((item)=>{
-                item.amount = 0
-                return item
-            })
-            param.setPackLst([...initStore])
-        }
-    // eslint-disable-next-line
-    // eslint-disable-next-line    
-    }, [])
-
     function handleInput(e) {
         let id = +e.target.name.replace('input-','')
         let value = +e.target.value
-        let pack = param.packLst.find((item)=>item.id === id)
-        pack.amount = value
+
+        let pack = param.packLst.find((item)=>+item.id === +id)
+        pack.value = value
         param.setPackLst([...param.packLst])
         setAmount()
     }

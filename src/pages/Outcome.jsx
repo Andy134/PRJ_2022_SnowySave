@@ -22,7 +22,7 @@ const Select_Sub = { pack : null, sub : null}
 
 export default function OutCome() {
 
-    const {balance, setBalance} = useContext(AppContext);
+    const {balance, setBalance, history, setHistory} = useContext(AppContext);
 
     // State, Effect
     const [packLst, setPackLst] = useState()
@@ -123,7 +123,7 @@ export default function OutCome() {
         
         let currPack = packs.find((el)=>el.id === pack);
         if(currPack){
-            if(currPack.value < outcomeForm.amount){
+            if(+currPack.value < +outcomeForm.amount){
                 alert("Số dư của quỹ không đủ")
                 return;
             }
@@ -133,7 +133,9 @@ export default function OutCome() {
             setBalance({...balance, total, packs})
             packService.distribution({...balance, total, packs})
 
+            history.unshift(outcomeForm)
             packService.updateHistory(outcomeForm)
+            setHistory([...history])
             setOutcomeForm(Outcome_Form)
         }
         else{
