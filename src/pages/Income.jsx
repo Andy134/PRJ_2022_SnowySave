@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useContext, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
@@ -16,9 +17,13 @@ const initIncomeForm = {
 export default function Income() {
     // State, Effect
     const [incomeForm, setIncomeForm] = useState(initIncomeForm)
-    const [packLst, setPackLst] = useState(null)
+    const [packLst, setPackLst] = useState([])
     const [openModal, setOpenModal] = useState(false)
     const {balance, setBalance, history, setHistory} = useContext(AppContext);
+
+    useEffect(()=>{
+        setPackLst(storeData);
+    },[])
 
     function handleReset(){
         if(incomeForm !== initIncomeForm){
@@ -56,7 +61,7 @@ export default function Income() {
     function handleDistribution() {
         let tempTotal = 0
         let total = balance?.total  || 0
-        packLst.forEach((item) => {
+        packLst?.forEach((item) => {
             tempTotal = tempTotal + +(item.value || 0)
         })
         console.log(tempTotal);
@@ -72,7 +77,7 @@ export default function Income() {
             packs.forEach(element => {
                 let id = element.id
                 const currPack = packLst.find((item)=> +item.id === +id)
-                const amount = currPack?.amount || 0
+                const amount = currPack?.value || 0
                 element.value = element.value + +amount
             });
 
@@ -237,6 +242,8 @@ export default function Income() {
 
 function DistributionManual({param}){
 
+    const {packLst, setPackLst} = param
+
     const [amount, setAmount] = useState(param.amount)
     const {balance} = useContext(AppContext)
 
@@ -244,10 +251,11 @@ function DistributionManual({param}){
         let id = +e.target.name.replace('input-','')
         let value = +e.target.value
 
-        let pack = param.packLst.find((item)=>+item.id === +id)
-        pack.value = value
-        param.setPackLst([...param.packLst])
-        setAmount()
+        let pack = packLst.find((item)=>+item.id === +id)
+        if(pack) {
+            pack.value = value
+           setPackLst([...packLst])
+        }
     }
 
     return <>
