@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import Pack from "../components/Pack";
@@ -244,7 +243,7 @@ function DistributionManual({param}){
 
     const {packLst, setPackLst} = param
 
-    const [amount, setAmount] = useState(param.amount)
+    const [amount] = useState(param.amount)
     const {balance} = useContext(AppContext)
 
     function handleInput(e) {
