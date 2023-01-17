@@ -12,10 +12,12 @@ export const packService = {
   distribution,
 }
 
+const collection = process.env.REACT_APP_FOO;
+
 // Balance
 async function currentBalance() {
   console.log("Fetch Balance :::")
-  const docRef = doc(db, "balance", "data");
+  const docRef = doc(db, collection, "data");
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     return docSnap.data();
@@ -24,14 +26,14 @@ async function currentBalance() {
 }
 async function distribution(pBalance) {
   console.log("Distribution :::");
-  const docRef = doc(db, "balance", "data");
+  const docRef = doc(db, collection, "data");
   await setDoc(docRef, pBalance);
 }
 
 // Sub
 async function fetchSubs() {
   console.log("Fetch Subs :::")
-  const docRef = doc(db, "balance", "subs");
+  const docRef = doc(db, collection, "subs");
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     return docSnap.data();
@@ -40,12 +42,12 @@ async function fetchSubs() {
 }
 async function saveSubs(data) {
   console.log("Save Subs :::");
-  const docRef = doc(db, "balance", "subs");
+  const docRef = doc(db, collection, "subs");
   await setDoc(docRef, data);
 }
 async function resetSubs() {
   console.log("Reset Subs :::");
-  const docRef = doc(db, "balance", "subs");
+  const docRef = doc(db, collection, "subs");
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     let subs = docSnap.data();
@@ -58,7 +60,7 @@ async function resetSubs() {
 // History
 async function fetchHistory(){
   console.log("Fetch History :::")
-  const docRef = doc(db, "balance", "history");
+  const docRef = doc(db, collection, "history");
   const docSnap = await getDoc(docRef);
   if (docSnap.exists()) {
     return docSnap.data();
@@ -71,14 +73,14 @@ async function updateHistory(data){
       let history = resp.data
       history.unshift(data)
       console.log("Save History :::");
-      const docRef = doc(db, "balance", "history");
+      const docRef = doc(db, collection, "history");
       setDoc(docRef, {data: history});
     }
   })
 }
 async function resetHistory(){
   console.log("Reset History :::");
-  const docRef = doc(db, "balance", "history");
+  const docRef = doc(db, collection, "history");
   setDoc(docRef, {data: []});
 }
 // ::: Balance 
