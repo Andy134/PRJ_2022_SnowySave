@@ -15,6 +15,7 @@ import Income from './pages/Income';
 import Outcome from './pages/Outcome';
 import Login from './pages/Login';
 import Reset from './pages/Reset';
+import History from './pages/History';
 
 
 const router = createBrowserRouter([
@@ -34,6 +35,10 @@ const router = createBrowserRouter([
       {
         path: "outcome",
         element: <Outcome />,
+      },
+      {
+        path: "history",
+        element: <History />,
       },
     ],
   },

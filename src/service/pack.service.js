@@ -1,4 +1,5 @@
 import { doc, getDoc, setDoc } from "firebase/firestore/lite";
+import moment from "moment";
 import { db } from "../firebaseConfig";
 
 export const packService = {
@@ -68,6 +69,7 @@ async function fetchHistory(){
   else return null;
 }
 async function updateHistory(data){
+  data.date = moment().toISOString();
   fetchHistory().then((resp)=>{
     if(resp.data) {
       let history = resp.data

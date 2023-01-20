@@ -80,6 +80,9 @@ export default function MyNavbar() {
                         <li className="nav-item">
                             <Link className="nav-link" to={"income"}>Income</Link>
                         </li>
+                        <li className="nav-item">
+                            <Link className="nav-link" to={"history"}>History</Link>
+                        </li>
                     </ul>
 
                     <div className="nav-item dropdown">

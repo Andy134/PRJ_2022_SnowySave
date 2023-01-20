@@ -10,7 +10,8 @@ import { AppContext } from "./Root";
 const initIncomeForm = {
     "src": "",
     "amount": 0,
-    "type": "I"
+    "type": "I",
+    "date": null
 }
 
 export default function Income() {
@@ -175,7 +176,7 @@ export default function Income() {
                             <h5 className="card-title">Thông tin số dư</h5>
                             <hr/>
                             <div className="d-flex justify-content-center align-items-center gap-3">
-                                <h4 className="card-text d-flex justify-content-center">
+                                <h4 className="card-text text-success d-flex justify-content-center">
                                     {util.getLocalCurrency(balance?.total)}
                                 </h4>
                             </div>
@@ -203,7 +204,7 @@ export default function Income() {
                                 </div>
                             })}
                             <div className="d-flex justify-content-center mt-3">
-                                <Link className="link" to="/history">Xem thêm</Link>
+                                <Link className="link" to="/dashboard/history">Xem thêm</Link>
                             </div>
                         </div>
                     </div>
