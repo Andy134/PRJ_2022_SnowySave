@@ -5,6 +5,7 @@ import { packService } from "../service/pack.service";
 import { util } from "../utility";
 import { AppContext } from "./Root";
 import { outcomeList } from "../data/outcomeList";
+import CurrencyInput from "react-currency-input-field";
 
 const New_Sub_Init_Form = {
     title: '',
@@ -82,7 +83,7 @@ export default function OutCome() {
             value =  e.target.value
         }
         setOutcomeForm({...outcomeForm, [name]: value})
-    }   
+    }
 
     function handleSaveSubForm(e){
         e.preventDefault();
@@ -191,10 +192,12 @@ export default function OutCome() {
                                     </Form.Group>
                                     <Form.Group className="mb-3" controlId="formAmount">
                                         <Form.Label>Số tiền</Form.Label>
-                                        <Form.Control name="amount" type="number" 
+                                        <CurrencyInput
+                                            className="form-control"
+                                            name="amount"
                                             required={true}
                                             value={outcomeForm.amount}
-                                            onChange={handleChangeOutcome}
+                                            onValueChange={(value, name) => handleChangeOutcome({target : {value, name}})}
                                         />
                                     </Form.Group>
                                     <Form.Group className="mb-3" controlId="formAmount">
