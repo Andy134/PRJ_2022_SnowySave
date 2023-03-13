@@ -30,7 +30,7 @@ export default function History() {
           </div>
         </div>
         <div className="row d-flex justify-content-center py-2">
-          {history.map((item)=><HCard hisItm={item}/>)}
+          {history.map((item, idx)=><HCard key={idx} hisItm={item}/>)}
         </div>
       </div>
   );

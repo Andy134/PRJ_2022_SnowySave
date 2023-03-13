@@ -20,7 +20,7 @@ import History from './pages/History';
 
 const router = createBrowserRouter([
   {
-    path: "dashboard",
+    path: "/",
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
@@ -43,7 +43,7 @@ const router = createBrowserRouter([
     ],
   },
   {
-    path: "/",
+    path: "/login",
     element: <Login />,
   },
   {
