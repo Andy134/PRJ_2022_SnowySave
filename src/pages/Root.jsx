@@ -16,7 +16,7 @@ export default function Root() {
 
   useEffect(() => {
     if (loading) return;
-    if (!user) return navigate("/");
+    if (!user) return navigate("/login");
   // eslint-disable-next-line
   }, [user, loading]);
 
