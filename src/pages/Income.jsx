@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
+import CurrencyInput from "react-currency-input-field";
 import { Link } from "react-router-dom";
 import Pack from "../components/Pack";
 import { storeData } from "../data/storeData";
@@ -92,6 +93,7 @@ export default function Income() {
         }
     }
     function handleChange(e){
+        console.log(e.target.name + "--" + e.target.value);
         const name = e.target.name;
         const value = e.target.value;
         setIncomeForm({...incomeForm, [name]: value})
@@ -107,10 +109,35 @@ export default function Income() {
     }
     return <>
         {/* Income */}
-        <div className="income">
+        <div className="income gap-2">
             <div className="row">
-                <div className="col-12">
-                    <div className="card text-start">
+                <div className="col-md-6 col-sm-12 mt-4" height={"auto"}>
+                    <div className="packs card" height="100%">
+                        <div className="card-body">
+                            <h5 className="card-title">Danh sách quỹ</h5>
+                            <hr/>
+                            <div className="d-flex flex-column">
+                                {balance?.packs?.map((item, key)=>{
+                                    return <Pack key={key} tyle={"list"} item={item}/>
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-6 col-sm-12 mt-4">
+                    <div className="balance card">
+                        <div className="card-body">
+                            <h5 className="card-title">Thông tin số dư</h5>
+                            <hr/>
+                            <div className="d-flex justify-content-center align-items-center gap-3">
+                                <h4 className="card-text text-success d-flex justify-content-center">
+                                    {util.getLocalCurrency(balance?.total)}
+                                </h4>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div className="card text-start mt-4">
                         <div className="card-header">
                             <h5 className="card-title">Nạp tiền</h5>
                         </div>
@@ -124,11 +151,24 @@ export default function Income() {
                                     
                                     <Form.Group className="mb-3" controlId="formAmount">
                                         <Form.Label>Số tiền</Form.Label>
-                                        <Form.Control name="amount" type="number" 
+                                        <CurrencyInput
+                                            className="form-control"
+                                            id="amount"
+                                            name="amount"
                                             value={incomeForm.amount} 
                                             onChange={handleChange}
                                             required={true}
+                                            decimalsLimit={0}
+                                            onValueChange={(value, name) => handleChange({target : {
+                                                name: name,
+                                                value: value
+                                            }})}
                                         />
+                                        {/* <Form.Control name="amount" type="number" 
+                                            value={incomeForm.amount} 
+                                            onChange={handleChange}
+                                            required={true}
+                                        /> */}
                                     </Form.Group>
                                     <Form.Group className="mb-3" controlId="formSrc">
                                         <Form.Label>Nguồn</Form.Label>
@@ -150,36 +190,6 @@ export default function Income() {
                             <Button variant="dark" type="button" onClick={handleAutoDistribution}>
                                 Phân bổ tự động
                             </Button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="row mb-4">
-                <div className="col-md-6 col-sm-12 mt-4">
-                    <div className="packs card">
-                        <div className="card-body">
-                            <h5 className="card-title">Danh sách quỹ</h5>
-                            <hr/>
-                            <div className="d-flex flex-column">
-                                {balance?.packs?.map((item, key)=>{
-                                    return <Pack key={key} tyle={"list"} item={item}/>
-                                })}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-md-6 col-sm-12 mt-4">
-                    <div className="balance card">
-                        <div className="card-body">
-                            <h5 className="card-title">Thông tin số dư</h5>
-                            <hr/>
-                            <div className="d-flex justify-content-center align-items-center gap-3">
-                                <h4 className="card-text text-success d-flex justify-content-center">
-                                    {util.getLocalCurrency(balance?.total)}
-                                </h4>
-                            </div>
                         </div>
                     </div>
                     
