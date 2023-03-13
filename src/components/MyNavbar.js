@@ -57,7 +57,7 @@ export default function MyNavbar() {
 
 
     useEffect(() => {
-        if (!user) return navigate("/");
+        if (!user) return navigate("/login");
         // eslint-disable-next-line
     }, [user]);
 

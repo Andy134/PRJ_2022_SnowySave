@@ -5,6 +5,7 @@ import { packService } from "../service/pack.service";
 import { util } from "../utility";
 import { AppContext } from "./Root";
 import { outcomeList } from "../data/outcomeList";
+import CurrencyInput from "react-currency-input-field";
 
 const New_Sub_Init_Form = {
     title: '',
@@ -82,7 +83,7 @@ export default function OutCome() {
             value =  e.target.value
         }
         setOutcomeForm({...outcomeForm, [name]: value})
-    }   
+    }
 
     function handleSaveSubForm(e){
         e.preventDefault();
@@ -162,9 +163,63 @@ export default function OutCome() {
     };
 
     return <>
-        <div className="outcome">
+        <div className="outcome row gap-2">
+
+            {/* Outcome List */}
+            <div className="col-6 row">
+            {
+                packLst?.map((item, idx)=>{
+                    return <div className="group col-12 mb-2" key={idx}>
+                            <div className="mb-2 d-flex justify-content-between gap-3">
+                                <div className="d-flex align-items-center">
+                                    <img width="36px" src={`/assets/pack/${item.img}`} alt=""/>
+                                    <h5 className="mb-0 ms-2">{item.title}</h5>
+                                    {balance && <h5 className="mb-0 ms-3 text-warning">{
+                                            util.getLocalCurrency(balance?.packs.find((el=>el.id === item.id)).value)
+                                        }</h5>
+                                    }
+                                </div>
+                                <div
+                                    className={`subPack d-flex align-items-center`}  
+                                    onClick={()=>handleShowModal(item.id)} 
+                                >
+                                    <img src={`/assets/menu.png`} 
+                                        onClick={()=>handleShowModal(item.id)} 
+                                        className="img-fluid rounded float-start" 
+                                        width="36px"
+                                        alt=""
+                                    />
+                                </div>
+                            </div>
+                            <div className="gr-body d-flex gap-4">
+                                {
+                                    subLst.filter((el)=>el.packId === item.id).map((subItem, idx)=>{
+                                        return <div key={idx} 
+                                                    className={`subPack p-2 
+                                                        ${(selSub && selSub.pack === item.id && selSub.sub === subItem.id) && "selected"}
+                                                    `}  
+                                                    data-bs-toggle="tooltip" 
+                                                    data-bs-placement="top" 
+                                                    title={subItem.title}
+                                                    onClick={()=>setSelectedSub(item.id, subItem.id)} 
+                                            >
+                                            <img src={subItem.img ? `/assets/sub/${subItem.img}` : `/assets/money.png`} 
+                                                width="64px"
+                                                className="img-fluid rounded float-start" 
+                                                alt={subItem.title}
+                                            />
+                                        </div>
+                                    })
+                                }
+
+                            </div>
+                        </div>
+                    })
+            }
+            </div>
+
             {/* Outcome Form */}
-            <div className="row">
+            <div className="col-6 row">
                 <div className="col-12">
                     <div className="card text-start">
                         <div className="card-header">
@@ -191,10 +246,12 @@ export default function OutCome() {
                                     </Form.Group>
                                     <Form.Group className="mb-3" controlId="formAmount">
                                         <Form.Label>Số tiền</Form.Label>
-                                        <Form.Control name="amount" type="number" 
+                                        <CurrencyInput
+                                            className="form-control"
+                                            name="amount"
                                             required={true}
                                             value={outcomeForm.amount}
-                                            onChange={handleChangeOutcome}
+                                            onValueChange={(value, name) => handleChangeOutcome({target : {value, name}})}
                                         />
                                     </Form.Group>
                                     <Form.Group className="mb-3" controlId="formAmount">
@@ -228,56 +285,10 @@ export default function OutCome() {
                     </div>
                 </div>
             </div>
-            
-            {/* Outcome List */}
-            <div className="row mb-4">
-            {
-                packLst?.map((item, idx)=>{
-                    return <div className="group col-12 mt-4" key={idx}>
-                            <div className="gr-name my-1 d-flex justify-item-content align-items-end">
-                                <img width="42px" src={`/assets/pack/${item.img}`} alt=""/>
-                                <h5 className="mb-0 ms-2">{item.title}</h5>
-                                {balance && <h5 className="mb-0 ms-3 text-warning">{
-                                        util.getLocalCurrency(balance?.packs.find((el=>el.id === item.id)).value)
-                                    }</h5>
-                                }
-                            </div>
-                            <div className="gr-body d-flex gap-4">
-                                {
-                                    subLst.filter((el)=>el.packId === item.id).map((subItem, idx)=>{
-                                        return <div key={idx} 
-                                                    className={`subPack p-2 
-                                                        ${(selSub && selSub.pack === item.id && selSub.sub === subItem.id) && "selected"}
-                                                    `}  
-                                                    data-bs-toggle="tooltip" 
-                                                    data-bs-placement="top" 
-                                                    title={subItem.title}
-                                                    onClick={()=>setSelectedSub(item.id, subItem.id)} 
-                                            >
-                                            <img src={subItem.img ? `/assets/sub/${subItem.img}` : `/assets/money.png`} 
-                                                className="img-fluid rounded float-start" 
-                                                alt={subItem.title}
-                                            />
-                                        </div>
-                                    })
-                                }
 
-                                <div key={-1} 
-                                    className={`subPack addItem p-2`}  
-                                    onClick={()=>handleShowModal(item.id)} 
-                                >
-                                    <img src={`/assets/add-new.png`} className="img-fluid rounded float-start" 
-                                            alt=""/>
-                                </div>
-
-                            </div>
-                        </div>
-                    })
-            }
-            </div>
         </div>
         {/* Modal Add new sub */}
-        <Modal show={openModal} onHide={handleCloseModal}>
+        <Modal show={openModal} onHide={handleCloseModal} he>
             <Modal.Header closeButton>
             <Modal.Title>Thêm khoản chi</Modal.Title>
             </Modal.Header>

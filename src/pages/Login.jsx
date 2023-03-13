@@ -12,7 +12,7 @@ function Login() {
     const [user, loading] = useAuthState(auth);
     const navigate = useNavigate();
     useEffect(() => {
-      if (user) navigate("/dashboard");
+      if (user) navigate("/");
     // eslint-disable-next-line  
     }, [user]);
     return (<>
