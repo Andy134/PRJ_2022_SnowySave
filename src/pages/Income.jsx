@@ -204,7 +204,7 @@ export default function Income() {
                                 </div>
                             })}
                             <div className="d-flex justify-content-center mt-3">
-                                <Link className="link" to="/dashboard/history">Xem thêm</Link>
+                                <Link className="link" to="/history">Xem thêm</Link>
                             </div>
                         </div>
                     </div>
