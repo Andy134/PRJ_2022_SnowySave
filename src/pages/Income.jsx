@@ -1,6 +1,5 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
-import { Link } from "react-router-dom";
 import Pack from "../components/Pack";
 import { storeData } from "../data/storeData";
 import { packService } from "../service/pack.service";
@@ -108,8 +107,24 @@ export default function Income() {
     return <>
         {/* Income */}
         <div className="income">
-            <div className="row">
-                <div className="col-12">
+
+            <div className="row mt-4">
+                <div className="col-md-6 col-sm-12">
+                    <div className="packs card">
+                        <div className="card-body">
+                            <h5 className="card-title">Danh sách quỹ</h5>
+                            <hr/>
+                            <div className="d-flex flex-column">
+                                {balance?.packs?.map((item, key)=>{
+                                    return <Pack key={key} tyle={"list"} item={item}/>
+                                })}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="col-md-6 col-sm-12 ">
+
                     <div className="card text-start">
                         <div className="card-header">
                             <h5 className="card-title">Nạp tiền</h5>
@@ -152,26 +167,8 @@ export default function Income() {
                             </Button>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div className="row mb-4">
-                <div className="col-md-6 col-sm-12 mt-4">
-                    <div className="packs card">
-                        <div className="card-body">
-                            <h5 className="card-title">Danh sách quỹ</h5>
-                            <hr/>
-                            <div className="d-flex flex-column">
-                                {balance?.packs?.map((item, key)=>{
-                                    return <Pack key={key} tyle={"list"} item={item}/>
-                                })}
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="col-md-6 col-sm-12 mt-4">
-                    <div className="balance card">
+                    <div className="card mt-4">
                         <div className="card-body">
                             <h5 className="card-title">Thông tin số dư</h5>
                             <hr/>
@@ -179,32 +176,6 @@ export default function Income() {
                                 <h4 className="card-text text-success d-flex justify-content-center">
                                     {util.getLocalCurrency(balance?.total)}
                                 </h4>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="card mt-4">
-                        <div className="card-body">
-                            <h5 className="card-title">Lịch sử</h5>
-                            <hr/>
-                            {history?.slice(0,5).map((item, idx)=>{
-                                return <div key={idx} >
-                                    <div className={`history-item py-2 d-flex align-items-${item.type === "I" ? 'end' : 'start'} flex-column`} with={'100%'}>
-                                        <span>
-                                            {item.type === "I" ?
-                                                <strong className="text-success">+ {util.getLocalCurrency(+item.amount)}</strong> 
-                                                :
-                                                <strong className="text-danger">- {util.getLocalCurrency(+item.amount)}</strong> 
-                                            }
-                                            {item.src && ` - ${item.src}`}
-                                            {item.note && ` ( ${item.note} )`}    
-                                        </span>
-                                        {/* <p className="text-muted">{moment(item.date).format('DD/MM/YYYY')}</p> */}
-                                    </div>
-                                </div>
-                            })}
-                            <div className="d-flex justify-content-center mt-3">
-                                <Link className="link" to="/history">Xem thêm</Link>
                             </div>
                         </div>
                     </div>

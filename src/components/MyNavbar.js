@@ -64,7 +64,7 @@ export default function MyNavbar() {
     return <>
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
             <div className="container">
-                <Link className="navbar-brand" to={"/"}>SNOWY MONEY</Link>
+                <Link className="navbar-brand" to={"/"}>SNOWY SAVER</Link>
                 <button className="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
                     aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>

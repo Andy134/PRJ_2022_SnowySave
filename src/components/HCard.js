@@ -4,12 +4,12 @@ import { util } from "../utility";
 export default function HCard({hisItm}) {
 
     const cardText = <>
-        <p>{hisItm.src && ` ${hisItm.src}`}</p>
-        <p>{hisItm.note && ` ${hisItm.note}`}</p>
-        <i className="text-muted">{moment(hisItm.date, 'YYYY-MM-DD')?.toDate()?.toLocaleDateString() || ''}</i>
+        <p>{hisItm.src && ` ${hisItm.src}`} <i>{hisItm.note && ` ( ${hisItm.note} )`}</i></p>
+       
     </>
 
-    return <div className="col-sm-12 col-md-9 py-2">
+    return <div className="col-sm-12 col-md-9 pt-4">
+        <i className="text-muted">{moment(hisItm.date, 'YYYY-MM-DD')?.toDate()?.toLocaleDateString() || ''}</i>
         {hisItm.type === "I" ?
         <div className="card d-flex align-items-start">
             <div className="card-body">

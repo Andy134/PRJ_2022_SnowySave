@@ -12,7 +12,8 @@ code {
     monospace;
 }
 
-.App {
+.outlet.container {
+  min-height: 80vh;
 }
 
 #error-page {

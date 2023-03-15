@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Outlet, useNavigate } from "react-router-dom";
 import CommonHeader from "../components/CommonHeader";
+import Footer from "../components/Footer";
 import MyNavbar from "../components/MyNavbar";
 import { auth } from "../firebaseConfig";
 import { packService } from '../service/pack.service';
@@ -41,9 +42,10 @@ export default function Root() {
       <div id="sm-app">
         <MyNavbar/>
         <CommonHeader/>
-        <div className="container">
+        <div className="outlet container">
           <Outlet />
         </div>
+        <Footer/>
       </div>
     </AppContext.Provider>
   );

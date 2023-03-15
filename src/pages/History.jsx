@@ -19,7 +19,7 @@ export default function History() {
   return (
       <div className="history">
         <div className="row d-flex justify-content-end">
-          <div className="col-3 d-flex justify-content-end">
+          <div className="col-12 d-flex justify-content-end">
             <CSVLink 
               className="btn btn-success"
               data={history}
@@ -29,7 +29,7 @@ export default function History() {
             </CSVLink>
           </div>
         </div>
-        <div className="row d-flex justify-content-center py-2">
+        <div className="row d-flex justify-content-center">
           {history.map((item, idx)=><HCard key={idx} hisItm={item}/>)}
         </div>
       </div>
