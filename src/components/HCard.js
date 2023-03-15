@@ -8,7 +8,7 @@ export default function HCard({hisItm}) {
        
     </>
 
-    return <div className="col-sm-12 col-md-9 pt-4">
+    return <div className={`col-sm-12 col-md-8 ${hisItm.type !== "I" ? 'offset-md-4' : ''}  pt-4`}>
         <i className="text-muted">{moment(hisItm.date, 'YYYY-MM-DD')?.toDate()?.toLocaleDateString() || ''}</i>
         {hisItm.type === "I" ?
         <div className="card d-flex align-items-start">

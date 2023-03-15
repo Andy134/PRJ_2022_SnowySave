@@ -29,7 +29,7 @@ export default function History() {
             </CSVLink>
           </div>
         </div>
-        <div className="row d-flex justify-content-center">
+        <div className="row">
           {history.map((item, idx)=><HCard key={idx} hisItm={item}/>)}
         </div>
       </div>
