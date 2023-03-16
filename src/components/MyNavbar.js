@@ -7,10 +7,11 @@ import { AppContext } from "../pages/Root";
 import { authService } from "../service/auth.service";
 import { packService } from "../service/pack.service";
 import { util } from "../utility";
+import ToggleDarkTheme from "./ToggleDarkTheme";
 
 export default function MyNavbar() {
 
-    const {balance, setBalance, setHistory} = useContext(AppContext);
+    const {balance, setBalance, setHistory, darkTheme} = useContext(AppContext);
     const [user] = useAuthState(auth);
     const navigate = useNavigate();
 
@@ -62,7 +63,7 @@ export default function MyNavbar() {
     }, [user]);
 
     return <>
-        <nav className="navbar navbar-expand-lg navbar-light bg-light">
+        <nav className={`navbar navbar-expand-lg navbar-${darkTheme ? 'dark' : 'light'} bg-${darkTheme ? 'dark' : 'light'}`}>
             <div className="container">
                 <Link className="navbar-brand" to={"/"}>SNOWY SAVER</Link>
                 <button className="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#collapsibleNavId" aria-controls="collapsibleNavId"
@@ -85,6 +86,8 @@ export default function MyNavbar() {
                         </li>
                     </ul>
 
+                    <ToggleDarkTheme/>
+
                     <div className="nav-item dropdown">
                         <button className="btn btn-md dropdown-toggle" 
                             id="dropdownId" 
@@ -92,7 +95,7 @@ export default function MyNavbar() {
                             aria-haspopup="true" 
                             aria-expanded="false"
                         >
-                            {user?.email}
+                            <span className="nav-item" style={{color : `${darkTheme ? 'white' : 'black'}`}}>{user?.email}</span>
                         </button >
                         <div className="dropdown-menu" aria-labelledby="dropdownId">
                             <Link className="dropdown-item"  onClick={handleResetBalance}>Reset Balance</Link>

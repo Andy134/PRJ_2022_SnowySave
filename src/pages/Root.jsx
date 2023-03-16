@@ -2,13 +2,14 @@ import { createContext, useEffect, useState } from "react";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { Outlet, useNavigate } from "react-router-dom";
 import CommonHeader from "../components/CommonHeader";
-import Footer from "../components/Footer";
 import MyNavbar from "../components/MyNavbar";
 import { auth } from "../firebaseConfig";
 import { packService } from '../service/pack.service';
 export const AppContext = createContext() 
 
 export default function Root() {
+
+  const [darkTheme, setDarkTheme] = useState(false)
   
   const [balance, setBalance] = useState(null)
   const [history, setHistory] = useState([])
@@ -31,6 +32,8 @@ export default function Root() {
   },[])
 
   const appValue = {
+    darkTheme, 
+    setDarkTheme,
     balance,
     setBalance,
     history, 
@@ -39,13 +42,12 @@ export default function Root() {
 
   return (
     <AppContext.Provider value={appValue}>
-      <div id="sm-app">
+      <div className={`sm-app ${darkTheme && 'dark'}`}>
         <MyNavbar/>
         <CommonHeader/>
         <div className="outlet container">
           <Outlet />
         </div>
-        <Footer/>
       </div>
     </AppContext.Provider>
   );
