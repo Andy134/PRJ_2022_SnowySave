@@ -5,6 +5,7 @@ import CommonHeader from "../components/CommonHeader";
 import MyNavbar from "../components/MyNavbar";
 import { auth } from "../firebaseConfig";
 import { packService } from '../service/pack.service';
+import { settingService } from "../service/setting.service";
 export const AppContext = createContext() 
 
 export default function Root() {
@@ -28,6 +29,9 @@ export default function Root() {
     });
     packService.fetchHistory().then((resp)=>{
       setHistory(resp.data)
+    });
+    settingService.fetchSetting().then((resp)=>{
+      console.log(resp);
     });
   },[])
 
