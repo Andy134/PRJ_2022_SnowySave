@@ -1,7 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { Button, Container, Form, Modal } from "react-bootstrap";
 import CurrencyInput from "react-currency-input-field";
-import { Link } from "react-router-dom";
 import Pack from "../components/Pack";
 import { storeData } from "../data/storeData";
 import { packService } from "../service/pack.service";
