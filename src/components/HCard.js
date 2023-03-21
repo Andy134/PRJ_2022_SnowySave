@@ -13,14 +13,14 @@ export default function HCard({hisItm}) {
         {hisItm.type === "I" ?
         <div className="card d-flex align-items-start">
             <div className="card-body">
-                <h4 className="card-title"><strong className="text-success">+ {util.getLocalCurrency(+hisItm.amount)}</strong> </h4>
+                <h4 className="card-title"><strong className="text-green">+ {util.getLocalCurrency(+hisItm.amount)}</strong> </h4>
                 {cardText}
             </div>
         </div>
         :
         <div className="card d-flex align-items-end">
             <div className="card-body d-flex flex-column align-items-end">
-                <h4 className="card-title"><strong className="text-danger">- {util.getLocalCurrency(+hisItm.amount)}</strong></h4>
+                <h4 className="card-title"><strong className="text-red">- {util.getLocalCurrency(+hisItm.amount)}</strong></h4>
                 {cardText}
             </div>
         </div>

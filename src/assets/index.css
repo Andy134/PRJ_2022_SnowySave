@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.sm-app {
+  transition: background-color 200ms linear;
+}
+
 .sm-app.dark {
   background-color: rgb(44, 49, 53);
 }
@@ -125,4 +129,11 @@ code {
   top: 50%;
   transform: translate(-50%, -50%);
   opacity: 1;
+}
+
+.text-red {
+  color: #ff6060
+}
+.text-green {
+  color: #60ff72
 }

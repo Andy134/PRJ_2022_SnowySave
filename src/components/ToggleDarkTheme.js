@@ -4,11 +4,7 @@ import { AppContext } from "../pages/Root";
 
 export default function ToggleDarkTheme() {
 
-    const {darkTheme, setDarkTheme} = useContext(AppContext);
-
-    function handleChangeTheme() {
-        setDarkTheme(!darkTheme)
-    }
+    const {darkTheme, handleChangeTheme} = useContext(AppContext);
 
     return <div className="theme-switch">
         <input type="checkbox" className="checkbox" id="checkbox" onChange={handleChangeTheme} checked={!darkTheme}/>
