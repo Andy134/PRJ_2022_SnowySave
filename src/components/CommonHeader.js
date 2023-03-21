@@ -7,7 +7,7 @@ export default function CommonHeader() {
     const {balance} = useContext(AppContext);
     
     return <>
-      <div className="container mt-3 mb-3 d-flex justify-content-between align-items-center">
+      <div className="cheader container mt-3 mb-3 d-flex justify-content-between align-items-center">
         <div>
         {
           `Số dư hiện tại: ${util.getLocalCurrency(balance?.total)} `

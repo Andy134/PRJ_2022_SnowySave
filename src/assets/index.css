@@ -12,7 +12,22 @@ code {
     monospace;
 }
 
-.App {
+.sm-app.dark {
+  background-color: rgb(44, 49, 53);
+}
+
+.sm-app.dark .cheader.container,
+.sm-app.dark .outcome .group  {
+  color: white;
+}
+
+.sm-app.dark .card {
+  background-color: rgb(65, 72, 77);
+  color: white;
+}
+
+.outlet.container {
+  min-height: 100vh;
 }
 
 #error-page {
@@ -37,7 +52,7 @@ code {
 }
 
 .description {
-  color: rgb(85, 85, 85);
+  color: rgb(135, 135, 135);
 }
 
 .amount {

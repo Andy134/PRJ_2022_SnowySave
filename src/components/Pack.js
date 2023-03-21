@@ -34,7 +34,7 @@ export default function Pack({item, tyle = "grid"}) {
                         <p className="card-text description">{item.description}</p>
                         <hr/>
                         <div className='d-flex justify-content-between align-items-center'>
-                            <div className='amount'>{amount}</div>
+                            <div className='amount text-warning'>{amount}</div>
                             {/* <div><a href={`/${item.id}`} className="btn btn-outline-dark">+</a></div> */}
                         </div>
                     </div>
@@ -59,7 +59,7 @@ export default function Pack({item, tyle = "grid"}) {
                         <span>&nbsp;-&nbsp;{item.percent}%</span>
                         </strong>
                         <div className='d-flex  align-items-center'>
-                            <div className='amount'>{amount}</div>
+                            <div className='amount text-warning'>{amount}</div>
                         </div>
                     </div>
                 </div>

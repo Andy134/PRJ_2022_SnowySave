@@ -166,14 +166,14 @@ export default function OutCome() {
         <div className="outcome row gap-2">
 
             {/* Outcome List */}
-            <div className="col-6 row">
+            <div className="col-sm-12 col-md-6 row">
             {
                 packLst?.map((item, idx)=>{
                     return <div className="group col-12 mb-2" key={idx}>
                             <div className="mb-2 d-flex justify-content-between gap-3">
                                 <div className="d-flex align-items-center">
                                     <img width="36px" src={`/assets/pack/${item.img}`} alt=""/>
-                                    <h5 className="mb-0 ms-2">{item.title}</h5>
+                                    <strong className="mb-0 ms-2">{item.title}</strong>
                                     {balance && <h5 className="mb-0 ms-3 text-warning">{
                                             util.getLocalCurrency(balance?.packs.find((el=>el.id === item.id)).value)
                                         }</h5>
@@ -204,7 +204,7 @@ export default function OutCome() {
                                                     onClick={()=>setSelectedSub(item.id, subItem.id)} 
                                             >
                                             <img src={subItem.img ? `/assets/sub/${subItem.img}` : `/assets/money.png`} 
-                                                width="64px"
+                                                width="40px"
                                                 className="img-fluid rounded float-start" 
                                                 alt={subItem.title}
                                             />
@@ -219,7 +219,7 @@ export default function OutCome() {
             </div>
 
             {/* Outcome Form */}
-            <div className="col-6 row">
+            <div className="col-sm-12 col-md-6 row">
                 <div className="col-12">
                     <div className="card text-start">
                         <div className="card-header">

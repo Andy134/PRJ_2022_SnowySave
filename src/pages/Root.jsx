@@ -8,6 +8,8 @@ import { packService } from '../service/pack.service';
 export const AppContext = createContext() 
 
 export default function Root() {
+
+  const [darkTheme, setDarkTheme] = useState(false)
   
   const [balance, setBalance] = useState(null)
   const [history, setHistory] = useState([])
@@ -30,6 +32,8 @@ export default function Root() {
   },[])
 
   const appValue = {
+    darkTheme, 
+    setDarkTheme,
     balance,
     setBalance,
     history, 
@@ -38,10 +42,10 @@ export default function Root() {
 
   return (
     <AppContext.Provider value={appValue}>
-      <div id="sm-app">
+      <div className={`sm-app ${darkTheme && 'dark'}`}>
         <MyNavbar/>
         <CommonHeader/>
-        <div className="container">
+        <div className="outlet container">
           <Outlet />
         </div>
       </div>
