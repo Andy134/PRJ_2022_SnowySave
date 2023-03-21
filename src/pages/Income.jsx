@@ -146,7 +146,6 @@ export default function Income() {
                                             id="amount"
                                             name="amount"
                                             value={incomeForm.amount} 
-                                            onChange={handleChange}
                                             required={true}
                                             decimalsLimit={0}
                                             onValueChange={(value, name) => handleChange({target : {
