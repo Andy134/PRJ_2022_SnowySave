@@ -22,18 +22,18 @@ export const options = {
 responsive: true,
 plugins: {
     legend: {
-    position: 'top',
+        position: 'right',
     },
     title: {
-    display: true,
-    text: 'Chart.js Bar Chart',
+        display: true,
+        text: 'Thống kê giao dịch theo tháng',
     },
 },
 };
 
 export default function Chart(params) {
 
-    const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
+    const labels = ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'];
 
     const data = {
         labels,
@@ -51,7 +51,7 @@ export default function Chart(params) {
         ],
     };
 
-    return <>
+    return <div className='p-5'>
         <Bar options={options} data={data} />
-    </>
+    </div>
 }
