@@ -73,16 +73,16 @@ export default function MyNavbar() {
                 <div className="collapse navbar-collapse" id="collapsibleNavId">
                     <ul className="navbar-nav me-auto mt-2 mt-lg-0">
                         <li className="nav-item">
-                            <Link className="nav-link" to={"/"} aria-current="page">Home <span className="visually-hidden">(current)</span></Link>
+                            <Link className="nav-link" to={"/"} aria-current="page">Trang Chủ <span className="visually-hidden">(current)</span></Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to={"outcome"}>Outcome</Link>
+                            <Link className="nav-link" to={"outcome"}>Chi Tiêu</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to={"income"}>Income</Link>
+                            <Link className="nav-link" to={"income"}>Thu Nhập</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link" to={"history"}>History</Link>
+                            <Link className="nav-link" to={"history"}>Lịch Sử</Link>
                         </li>
                     </ul>
 
