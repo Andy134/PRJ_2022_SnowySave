@@ -24,7 +24,7 @@ plugins: {
     },
     title: {
         display: true,
-        text: 'Thống kê giao dịch theo tháng ($year)',
+        text: 'Thống kê giao dịch theo tháng',
     },
 },
 };
@@ -44,12 +44,13 @@ export default function Chart(params) {
           {
             label: 'Income',
             data: dataSet.income,
-            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+            backgroundColor: 'rgba(53, 162, 235, 0.5)',
           },
           {
             label: 'Outcome',
             data: dataSet.outcome,
-            backgroundColor: 'rgba(53, 162, 235, 0.5)',
+            backgroundColor: 'rgba(255, 99, 132, 0.5)',
+
           }
         ],
     };
@@ -75,13 +76,21 @@ export default function Chart(params) {
           return { ...acc, [key]: [...curGroup, obj] };
         }, {});
 
-        [...Array(12).keys()].map((i => {
-          const idx = i + 1
-          const currentGroupByMonthHistory = groupByMonthHistory[idx]
-          
-        }))
+        let result = {}
 
-        // labels.forEach 
+        result.income = [...Array(12).keys()].map((i => {
+          const idx = i + 1
+          const totalIncomeByMonth = groupByMonthHistory[idx]?.filter(itm => itm.type === 'I')?.reduce((curr, itm) => curr + +itm.amount, 0) || 0;
+          return totalIncomeByMonth
+        }));
+
+        result.outcome = [...Array(12).keys()].map((i => {
+          const idx = i + 1
+          const totalOutcomeByMonth = groupByMonthHistory[idx]?.filter(itm => itm.type === 'O')?.reduce((curr, itm) => curr + +itm.amount, 0) || 0;
+          return totalOutcomeByMonth
+        }));
+
+        setData(result);
       }
 
       // eslint-disable-next-line
