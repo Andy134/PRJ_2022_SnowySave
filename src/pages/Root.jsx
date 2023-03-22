@@ -54,7 +54,7 @@ export default function Root() {
 
   return (
     <AppContext.Provider value={appValue}>
-      <div className={`sm-app ${darkTheme && 'dark'}`}>
+      <div className={`sm-app ${darkTheme && 'dark'} pb-4`}>
         <MyNavbar />
         <CommonHeader />
         <div className="outlet container">

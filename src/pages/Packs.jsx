@@ -10,12 +10,7 @@ export default function Packs() {
 
     return <>
         <div className="packs">
-            <div className="row">
-                <div className="col-sm-12" >
-                    <Chart />
-                </div>
-            </div>
-
+            <Chart />
             <div className="row mt-4 g-4">
                 {balance && balance.packs?.map((item, idx)=>{
                     return <div key={idx} className="col-sm-12 col-md-6 col-lg-4">
