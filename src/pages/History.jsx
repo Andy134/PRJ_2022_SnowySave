@@ -1,20 +1,12 @@
 import moment from "moment";
-import { createContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { CSVLink } from "react-csv";
 import HCard from "../components/HCard";
-import { packService } from '../service/pack.service';
-
-export const AppContext = createContext() ;
+import { AppContext } from "./Root";
 
 export default function History() {
   
-  const [history, setHistory] = useState([])
-
-  useEffect(()=>{
-    packService.fetchHistory().then((resp)=>{
-      setHistory(resp.data)
-    });
-  },[])
+  const {history} = useContext(AppContext);
 
   return (
       <div className="history">
@@ -22,7 +14,7 @@ export default function History() {
           <div className="col-12 d-flex justify-content-end">
             <CSVLink 
               className="btn btn-success"
-              data={history}
+              data={history || []}
               filename={`History_${moment().format("DDMMYYYYHHMMSS").toString()}.csv`}
             >
               Download
@@ -30,7 +22,7 @@ export default function History() {
           </div>
         </div>
         <div className="row">
-          {history.map((item, idx)=><HCard key={idx} hisItm={item}/>)}
+          {history?.map((item, idx)=><HCard key={idx} hisItm={item}/>)}
         </div>
       </div>
   );

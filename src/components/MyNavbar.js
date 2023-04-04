@@ -55,7 +55,11 @@ export default function MyNavbar() {
         "Reset Subsidiary ?",
       )
     }
-
+    
+    function handleImportHistory() {
+      const data = ["test"]
+      packService.importHistory("2023", data);
+    }
 
     useEffect(() => {
         if (!user) return navigate("/login");
@@ -98,6 +102,8 @@ export default function MyNavbar() {
                             <span className="nav-item" style={{color : `${darkTheme ? 'white' : 'black'}`}}>{user?.email}</span>
                         </button >
                         <div className="dropdown-menu" aria-labelledby="dropdownId">
+                            <Link className="dropdown-item"  onClick={handleImportHistory}>Import History</Link>
+                            <hr/>
                             <Link className="dropdown-item"  onClick={handleResetBalance}>Reset Balance</Link>
                             <Link className="dropdown-item"  onClick={handleResetSub}>Reset Sub</Link>
                             <Link className="dropdown-item"  onClick={handleResetHistory}>Reset History</Link>
