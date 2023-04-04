@@ -12,13 +12,15 @@ export default function History() {
       <div className="history">
         <div className="row d-flex justify-content-end">
           <div className="col-12 d-flex justify-content-end">
+            {history && history.length > 1 &&
             <CSVLink 
               className="btn btn-success"
-              data={history || []}
+              data={history}
               filename={`History_${moment().format("DDMMYYYYHHMMSS").toString()}.csv`}
             >
               Download
             </CSVLink>
+          }
           </div>
         </div>
         <div className="row">

@@ -61,6 +61,7 @@ export default function Root() {
   return (
     <AppContext.Provider value={appValue}>
       <div className={`sm-app ${darkTheme && 'dark'} pb-4`}>
+        {process.env.NODE_ENV === "development" && <div width="100%" style={{backgroundColor: 'cyan', color: 'black'}}>DEVELOPMENT</div>}
         <MyNavbar />
         <CommonHeader />
         <div className="outlet container">
