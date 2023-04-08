@@ -1,21 +1,21 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import React from "react";
+import "react-datepicker/dist/react-datepicker.css";
 import ReactDOM from "react-dom/client";
 import {
   createBrowserRouter,
   RouterProvider
 } from "react-router-dom";
 import "./assets/index.css";
-import "react-datepicker/dist/react-datepicker.css";
 import ErrorPage from './pages/ErrorPage';
 import Root from './pages/Root';
 
-import Packs from './pages/Packs';
-import Income from './pages/Income';
-import Outcome from './pages/Outcome';
-import Login from './pages/Login';
-import Reset from './pages/Reset';
 import History from './pages/History';
+import Homepage from './pages/Homepage';
+import Income from './pages/Income';
+import Login from './pages/Login';
+import Outcome from './pages/Outcome';
+import Reset from './pages/Reset';
 
 
 const router = createBrowserRouter([
@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Packs />,
+        element: <Homepage />,
       },
       {
         path: "income",
