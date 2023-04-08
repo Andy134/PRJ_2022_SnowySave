@@ -5,6 +5,7 @@ import CommonHeader from "../components/CommonHeader";
 import MyNavbar from "../components/MyNavbar";
 import { auth } from "../firebaseConfig";
 import { packService } from '../service/pack.service';
+import { util } from "../utility";
 export const AppContext = createContext()
 
 const STORAGE_DARK_THEME = "STORAGE_DARK_THEME"
@@ -31,8 +32,13 @@ export default function Root() {
     packService.currentBalance().then((resp) => {
       setBalance(resp)
     });
-    packService.fetchHistory().then((resp) => {
-      setHistory(resp.data)
+
+    let currYear = util.getDate(new Date()).year
+    packService.fetchHistory().then((resp)=>{
+      const currentyearData = resp.data?.find((item)=> item[currYear])
+      if(currentyearData){
+        setHistory(currentyearData[currYear] || [])
+      }
     });
   // eslint-disable-next-line
   }, [])
@@ -55,6 +61,7 @@ export default function Root() {
   return (
     <AppContext.Provider value={appValue}>
       <div className={`sm-app ${darkTheme && 'dark'} pb-4`}>
+        {process.env.NODE_ENV === "development" && <div width="100%" style={{backgroundColor: 'cyan', color: 'black'}}>DEVELOPMENT</div>}
         <MyNavbar />
         <CommonHeader />
         <div className="outlet container">

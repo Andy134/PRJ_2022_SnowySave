@@ -1,3 +1,4 @@
+import moment from "moment";
 import Swal from "sweetalert2"
 
 
@@ -5,8 +6,18 @@ import Swal from "sweetalert2"
 export const util = {
     getLocalCurrency,
     confirmSAlert,
-    saveSuccess
+    saveSuccess,
+    getDate,
 }
+
+function getDate(date){
+    var check = moment(date, 'YYYY/MM/DD');
+    return {
+      day: check.format('D'),
+      month: check.format('M'),
+      year: check.format('YYYY')
+    }
+  }
 
 function getLocalCurrency(amount){
     amount = amount || 0 

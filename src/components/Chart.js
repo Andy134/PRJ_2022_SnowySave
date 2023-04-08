@@ -2,10 +2,10 @@ import {
   BarElement, CategoryScale, Chart as ChartJS, Legend, LinearScale, Title,
   Tooltip
 } from 'chart.js';
-import moment from 'moment';
 import { useContext, useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { AppContext } from '../pages/Root';
+import { util } from '../utility';
 
 ChartJS.register(
 CategoryScale,
@@ -42,12 +42,12 @@ export default function Chart(params) {
         labels,
         datasets: [
           {
-            label: 'Income',
+            label: 'Thu nhập',
             data: dataSet.income,
             backgroundColor: 'rgba(53, 162, 235, 0.5)',
           },
           {
-            label: 'Outcome',
+            label: 'Chi tiêu',
             data: dataSet.outcome,
             backgroundColor: 'rgba(255, 99, 132, 0.5)',
 
@@ -60,17 +60,8 @@ export default function Chart(params) {
     useEffect(()=>{
 
       if(history.length > 0){
-        function getDate(date){
-          var check = moment(date, 'YYYY/MM/DD');
-          return {
-            day: check.format('D'),
-            month: check.format('M'),
-            year: check.format('YYYY')
-          }
-        }
-
         const groupByMonthHistory = history.reduce((acc, obj) => {
-          const key = getDate(obj["date"]).month;
+          const key = util.getDate(obj["date"]).month;
           const curGroup = acc[key] ?? [];
       
           return { ...acc, [key]: [...curGroup, obj] };
